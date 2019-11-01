@@ -2,7 +2,12 @@ import * as React from 'react'
 import { Comment } from 'semantic-ui-react'
 import { ChatMessage } from './type'
 
-const Message: React.FC<ChatMessage> = ({ userAvatar, userName, dataCreated, text }) => (
+const Message: React.FC<ChatMessage> = ({
+  userAvatar,
+  userName,
+  dataCreated,
+  text,
+}) => (
   <Comment>
     <Comment.Avatar src={userAvatar} />
     <Comment.Content>
@@ -18,4 +23,4 @@ const Message: React.FC<ChatMessage> = ({ userAvatar, userName, dataCreated, tex
   </Comment>
 )
 
-export default Message
+export default React.memo(Message)

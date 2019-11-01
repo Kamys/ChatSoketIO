@@ -1,23 +1,22 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import socketIOClient from 'socket.io-client'
-import {
-  Button,
-  Comment,
-  Header,
-  Input,
-  Message as MessageInfo,
-} from 'semantic-ui-react'
+import { Button, Input, Message as MessageInfo } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { ChatItem, ChatMessage, ChatNotification } from './type'
 import Message from './Message'
 import { formatChatDate } from './utils'
-import './Chat.css'
+import MessageList from './MessageList'
 
 interface IProps {}
 
-const CommentStyled = styled.div`
-  width: 100%;
+const ChatContainer = styled.div`
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `
+
 const InputStyled = styled.div`
   width: 100%;
 `
@@ -31,49 +30,59 @@ const Chat: React.FC<IProps> = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [notifications, setNotification] = useState<ChatNotification[]>([])
 
-  const handlerSend = () => {
+  const handlerSend = useCallback(() => {
     socket.emit('sendMessage', message)
     setMessage('')
-  }
+  }, [message])
 
-  const handlerStartChat = () => {
+  const handlerStartChat = useCallback(() => {
     socket.emit('initUser', { userName })
     setIsChatStart(true)
-  }
+  }, [userName])
 
-  const handleKeyDown = event => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      socket.emit('sendMessage', message)
-      setMessage('')
+  const handleKeyDown = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        socket.emit('sendMessage', message)
+        setMessage('')
+      }
+    },
+    [message]
+  )
+
+  useEffect(() => {
+    socket.on('sendMessage', ({ userName, msg }) => {
+      setMessages([
+        ...messages,
+        {
+          id: new Date().valueOf().toString(),
+          text: msg,
+          dataCreated: new Date().toString(),
+          userAvatar:
+            'https://react.semantic-ui.com/images/avatar/small/matt.jpg',
+          userName: userName,
+        },
+      ])
+    })
+
+    socket.on('info', msg => {
+      setNotification([
+        ...notifications,
+        {
+          id: new Date().valueOf().toString(),
+          dataCreated: new Date().toString(),
+          text: msg,
+          isPositive: true,
+        },
+      ])
+    })
+
+    return () => {
+      socket.off('sendMessage')
+      socket.off('info')
     }
-  }
-
-  socket.on('sendMessage', ({ userName, msg }) => {
-    setMessages([
-      ...messages,
-      {
-        id: new Date().valueOf().toString(),
-        text: msg,
-        dataCreated: new Date().toString(),
-        userAvatar:
-          'https://react.semantic-ui.com/images/avatar/small/matt.jpg',
-        userName: userName,
-      },
-    ])
-  })
-
-  socket.on('info', msg => {
-    setNotification([
-      ...notifications,
-      {
-        id: new Date().valueOf().toString(),
-        dataCreated: new Date().toString(),
-        text: msg,
-        isPositive: true,
-      },
-    ])
-  })
+  }, [messages, notifications])
 
   const chatItems = useMemo<ChatItem[]>(() => {
     const messageNodes = messages.map(message => ({
@@ -115,20 +124,9 @@ const Chat: React.FC<IProps> = () => {
     )
   }
 
-  console.log('Chat render')
-
   return (
-    <div className={'chat'}>
-      <Comment.Group as={CommentStyled}>
-        <Header as="h3" dividing>
-          Main chat
-        </Header>
-        {chatItems.map(chatItem => (
-          <React.Fragment key={chatItem.id}>
-            {chatItem.reactNode}
-          </React.Fragment>
-        ))}
-      </Comment.Group>
+    <ChatContainer>
+      <MessageList chatItems={chatItems} />
       <Input
         as={InputStyled}
         value={message}
@@ -137,7 +135,7 @@ const Chat: React.FC<IProps> = () => {
         action={{ icon: 'send', onClick: handlerSend }}
         placeholder="Write a messages..."
       />
-    </div>
+    </ChatContainer>
   )
 }
 
