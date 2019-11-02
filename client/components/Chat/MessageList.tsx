@@ -7,25 +7,31 @@ const CommentStyled = styled.div`
   width: 100%;
 `
 
+const Comments = styled.div`
+  height: 500px;
+  overflow: auto;
+`
+
 interface IProps {
   chatItems: ChatItem[]
 }
 
 const MessageList: React.FC<IProps> = ({ chatItems }) => {
-  console.log('Render==============')
   return (
     <Comment.Group as={CommentStyled}>
       <Header as="h3" dividing>
         Main chat
       </Header>
-      {chatItems.map(chatItem => {
-        console.log(chatItem.id)
-        return (
-          <React.Fragment key={chatItem.id}>
-            {chatItem.reactNode}
-          </React.Fragment>
-        )
-      })}
+      <Comments>
+        {chatItems.map(chatItem => {
+          console.log(chatItem.id)
+          return (
+            <React.Fragment key={chatItem.id}>
+              {chatItem.reactNode}
+            </React.Fragment>
+          )
+        })}
+      </Comments>
     </Comment.Group>
   )
 }

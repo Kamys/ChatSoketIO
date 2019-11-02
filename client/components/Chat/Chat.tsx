@@ -10,7 +10,7 @@ import MessageList from './MessageList'
 interface IProps {}
 
 const ChatContainer = styled.div`
-  width: 300px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
