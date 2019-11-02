@@ -1,5 +1,5 @@
 import { Server } from 'http'
-const socketIo = require('socket.io')
+import socketIo from 'socket.io'
 
 const run = (http: Server) => {
   const io = socketIo(http)
@@ -11,7 +11,7 @@ const run = (http: Server) => {
       socket.on('disconnect', () => {
         io.emit('info', `${userName} left the chat`)
       })
-      socket.on('sendMessage', (msg) => {
+      socket.on('sendMessage', msg => {
         console.log('sendMessage', { userName, msg })
         io.emit('sendMessage', { userName, msg })
       })
@@ -19,4 +19,4 @@ const run = (http: Server) => {
   })
 }
 
-module.exports = { run }
+export default { run }
