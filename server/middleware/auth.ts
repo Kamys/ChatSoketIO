@@ -14,7 +14,7 @@ const auth: RequestHandler = (req: RequestUser, res, next) => {
     req.user = jwt.verify(token, config.myprivatekey)
     next()
   } catch (ex) {
-    res.status(400).send('Invalid token.')
+    res.status(401).send('Invalid token.')
   }
 }
 

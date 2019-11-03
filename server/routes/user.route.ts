@@ -1,13 +1,13 @@
 import auth from '../middleware/auth'
-import bcrypt from 'bcrypt'
 import express from 'express'
 import {
-  UserModel,
-  validateUser,
   generateAuthToken,
   IUser,
+  UserModel,
+  validateUser,
 } from '../models/user.model'
 import { CustomRequest, RequestUser } from '../type'
+import { checkPassword, toHas } from '../utils/password'
 
 const router = express.Router()
 
@@ -23,25 +23,50 @@ router.post('/', async (req: CustomRequest<IUser>, res) => {
     return
   }
 
-  let user = await UserModel.findOne({ email: req.body.email })
+  let user: IUser = await UserModel.findOne({ userName: req.body.userName })
   if (user) {
     res.status(400).send('User already registered.')
     return
   }
 
   user = new UserModel({
-    name: req.body.name,
+    userName: req.body.userName,
     password: req.body.password,
-    email: req.body.email,
   })
-  user.password = await bcrypt.hash(user.password, 10)
+  user.password = await toHas(user.password)
   await user.save()
 
   const token = generateAuthToken(user)
   res.header('x-access-token', token).send({
     _id: user._id,
-    name: user.name,
-    email: user.email,
+    userName: user.userName,
+  })
+})
+
+router.post('/login', async (req: RequestUser, res) => {
+  const { body } = req
+  const { error } = validateUser(body)
+  if (error) {
+    res.status(400).send(error.details[0].message)
+    return
+  }
+
+  const user = await UserModel.findOne({ userName: body.userName })
+  if (!user) {
+    res.status(404).send('UserName not found')
+    return
+  }
+
+  const isPasswordCorrect = await checkPassword(body.password, user.password)
+  if (!isPasswordCorrect) {
+    res.status(401).send('Password incorrect')
+    return
+  }
+
+  const token = generateAuthToken(user)
+  res.header('x-access-token', token).send({
+    _id: user._id,
+    userName: user.userName,
   })
 })
 

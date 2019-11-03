@@ -4,18 +4,12 @@ import Joi from 'joi'
 import mongoose, { Document } from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  userName: {
     type: String,
+    unique: true,
     required: true,
     minlength: 3,
     maxlength: 50,
-  },
-  email: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 255,
-    unique: true,
   },
   password: {
     type: String,
@@ -27,8 +21,7 @@ const UserSchema = new mongoose.Schema({
 })
 
 export interface IUser extends Document {
-  name: string
-  email: string
+  userName: string
   password: string
   isAdmin: boolean
 }
@@ -37,15 +30,10 @@ export const UserModel = mongoose.model<IUser>('User', UserSchema)
 
 export const validateUser = user => {
   const schema = {
-    name: Joi.string()
+    userName: Joi.string()
       .min(3)
       .max(50)
       .required(),
-    email: Joi.string()
-      .min(5)
-      .max(255)
-      .required()
-      .email(),
     password: Joi.string()
       .min(3)
       .max(255)
