@@ -4,7 +4,7 @@ import user from '../../store/user'
 import { Button, Card, Form, Header, Message, Popup } from 'semantic-ui-react'
 import styled from 'styled-components'
 
-interface IProps {}
+type Props = {}
 
 const StyledForm = styled(Form)`
   display: flex;
@@ -53,7 +53,7 @@ const useForm = <T extends {}>(
   return [form, onChange]
 }
 
-const Auth: React.FC<IProps> = () => {
+const Auth: React.FC<Props> = () => {
   const [error, setError] = useState<string>()
   const [form, onChange] = useForm({
     userName: '',
@@ -83,8 +83,6 @@ const Auth: React.FC<IProps> = () => {
       setError(error.toString())
     })
   }, [form])
-
-  console.log('error: ', error)
 
   return (
     <Popup

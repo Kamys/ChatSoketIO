@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import isNil from 'lodash/isNil'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import { useStore } from 'effector-react'
-import user, { IUser } from '../../store/user'
 import RedirectConditional from './RedirectConditional'
 import { ROUT_URL } from './constants'
 import Auth from '../Auth'
+import { useUser } from '../../hooks'
+import { Private } from './Private'
+import Chat from '../Chat/Chat'
 
 const PageContained = styled.div`
   height: 100vh;
@@ -15,39 +15,10 @@ const PageContained = styled.div`
   align-items: center;
 `
 
-interface IProps {}
+type Props = {}
 
-type UseUserResult = {
-  isLogin: boolean
-  isLoading: boolean
-  account: IUser
-}
-
-const useUser = (): UseUserResult => {
-  const account = useStore(user.account)
-  const [isLoading, setIsLoading] = useState(true)
-  const isLogin = !isNil(account)
-
-  useEffect(() => {
-    user.fetchAccount().finally(() => {
-      setIsLoading(false)
-    })
-  }, [])
-
-  console.log('Render useUser', {
-    account,
-    isLogin,
-    isLoading,
-  })
-  return {
-    account,
-    isLogin,
-    isLoading,
-  }
-}
-
-const MainRouter: React.FC<IProps> = () => {
-  const { isLoading, isLogin, account } = useUser()
+const MainRouter: React.FC<Props> = () => {
+  const { isLoading, isLogin } = useUser()
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -62,11 +33,9 @@ const MainRouter: React.FC<IProps> = () => {
               <Auth />
             </RedirectConditional>
           </Route>
-          <Route path={ROUT_URL.Home}>
-            <RedirectConditional isRedirect={!isLogin} to={ROUT_URL.Login}>
-              User name: {JSON.stringify(account)}
-            </RedirectConditional>
-          </Route>
+          <Private path={ROUT_URL.Home}>
+            <Chat />
+          </Private>
           <Route>404</Route>
         </Switch>
       </PageContained>

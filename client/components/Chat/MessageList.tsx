@@ -12,11 +12,11 @@ const Comments = styled.div`
   overflow: auto;
 `
 
-interface IProps {
+type Props = {
   chatItems: ChatItem[]
 }
 
-const MessageList: React.FC<IProps> = ({ chatItems }) => {
+const MessageList: React.FC<Props> = ({ chatItems }) => {
   return (
     <Comment.Group as={CommentStyled}>
       <Header as="h3" dividing>

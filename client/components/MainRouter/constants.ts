@@ -1,4 +1,4 @@
-export const ROUT_URL = {
-  Home: '/',
-  Login: '/login',
+export enum ROUT_URL {
+  Home = '/',
+  Login = '/login',
 }

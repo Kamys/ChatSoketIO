@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import socketIOClient from 'socket.io-client'
-import { Button, Input, Message as MessageInfo } from 'semantic-ui-react'
+import { Input, Message as MessageInfo } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { ChatItem, ChatMessage, ChatNotification } from './type'
 import Message from './Message'
 import { formatChatDate } from './utils'
 import MessageList from './MessageList'
+import { useUser } from '../../hooks'
 
-interface IProps {}
+type Props = {}
 
 const ChatContainer = styled.div`
   width: 500px;
@@ -23,9 +24,7 @@ const InputStyled = styled.div`
 
 const socket = socketIOClient()
 
-const Chat: React.FC<IProps> = () => {
-  const [isChatStart, setIsChatStart] = useState<boolean>(false)
-  const [userName, setUserName] = useState<string>('')
+const Chat: React.FC<Props> = () => {
   const [message, setMessage] = useState<string>('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [notifications, setNotification] = useState<ChatNotification[]>([])
@@ -35,10 +34,11 @@ const Chat: React.FC<IProps> = () => {
     setMessage('')
   }, [message])
 
-  const handlerStartChat = useCallback(() => {
-    socket.emit('initUser', { userName })
-    setIsChatStart(true)
-  }, [userName])
+  const { account } = useUser()
+
+  useEffect(() => {
+    socket.emit('initUser', { userName: account.userName })
+  }, [account.userName])
 
   const handleKeyDown = useCallback(
     event => {
@@ -111,18 +111,6 @@ const Chat: React.FC<IProps> = () => {
       return firstTime - secondTime
     })
   }, [messages, notifications])
-
-  if (!isChatStart) {
-    return (
-      <div>
-        Enter user name:{' '}
-        <input onChange={event => setUserName(event.target.value)} />
-        <Button disabled={userName.length === 0} onClick={handlerStartChat}>
-          Start chat
-        </Button>
-      </div>
-    )
-  }
 
   return (
     <ChatContainer>

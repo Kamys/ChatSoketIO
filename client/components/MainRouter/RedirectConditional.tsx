@@ -1,13 +1,13 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
-interface IProps {
+type Props = {
   children: any
   isRedirect: boolean
   to: string
 }
 
-const RedirectConditional: React.FC<IProps> = props => {
+const RedirectConditional: React.FC<Props> = props => {
   const { isRedirect, to, children, ...rest } = props
 
   if (isRedirect) {
