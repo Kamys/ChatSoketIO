@@ -37,9 +37,12 @@ router.post('/', async (req: CustomRequest<IUser>, res) => {
   await user.save()
 
   const token = generateAuthToken(user)
-  res.header('x-access-token', token).send({
-    _id: user._id,
-    userName: user.userName,
+  res.send({
+    user: {
+      id: user._id,
+      userName: user.userName,
+    },
+    token,
   })
 })
 
@@ -53,7 +56,7 @@ router.post('/login', async (req: RequestUser, res) => {
 
   const user = await UserModel.findOne({ userName: body.userName })
   if (!user) {
-    res.status(404).send('UserName not found')
+    res.status(400).send('UserName not found')
     return
   }
 
@@ -64,9 +67,12 @@ router.post('/login', async (req: RequestUser, res) => {
   }
 
   const token = generateAuthToken(user)
-  res.header('x-access-token', token).send({
-    _id: user._id,
-    userName: user.userName,
+  res.send({
+    user: {
+      id: user._id,
+      userName: user.userName,
+    },
+    token,
   })
 })
 

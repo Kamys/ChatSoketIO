@@ -1,30 +1,64 @@
 import { createEffect, createStore } from 'effector'
-import axios from 'axios'
+import { axiosInstance, initToken } from '../../api'
 
-export interface IUserPayload {
+export interface IUserLoginForm {
   userName: string
   password: string
 }
 
-const login = createEffect<IUserPayload, IUserPayload, void>('login', {
-  handler: user => {
-    return axios.post('http://localhost:3000/api/users/login', user)
-  },
-})
+export interface ILoginResponse {
+  user: {
+    id: string
+    userName: string
+  }
+  token: string
+}
 
-const singUp = createEffect<IUserPayload, IUserPayload, void>('singUp', {
-  handler: user => {
-    return axios.post('http://localhost:3000/api/users', user)
-  },
-})
+export interface IUser {
+  id: string
+  userName: string
+}
 
-const account = createStore<IUserPayload>(null).on(
-  login.done,
-  (_, action) => action.result
+const createUser = createEffect<IUserLoginForm, ILoginResponse, void>(
+  'createUser',
+  {
+    handler: user => {
+      return axiosInstance.post('users', user).then(response => response.data)
+    },
+  }
 )
+
+const login = createEffect<IUserLoginForm, ILoginResponse, void>('login', {
+  handler: user => {
+    return axiosInstance
+      .post('users/login', user)
+      .then(response => response.data)
+  },
+})
+
+const fetchAccount = createEffect<void, IUser, void>('fetchAccount', {
+  handler: () => {
+    return axiosInstance.get('users/current').then(response => response.data)
+  },
+})
+
+login.done.watch(({ result }) => {
+  console.log('login: ', result)
+  initToken(result.token)
+})
+
+createUser.done.watch(({ result: { token } }) => {
+  initToken(token)
+})
+
+const account = createStore<IUser>(null)
+  .on(login.done, (_, action) => action.result.user)
+  .on(createUser.done, (_, action) => action.result.user)
+  .on(fetchAccount.done, (_, action) => action.result)
 
 export default {
   login,
   account,
-  singUp,
+  singUp: createUser,
+  fetchAccount,
 }

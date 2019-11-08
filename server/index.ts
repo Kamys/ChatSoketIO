@@ -21,6 +21,10 @@ mongoose
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...', err))
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization')
+  next()
+})
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use('/api/users', usersRoute)
@@ -30,7 +34,7 @@ app.get('*', (req, res) => {
 })
 
 http.listen(3000, () => {
-  console.log('Server start: http://localhost:3000/')
+  console.log('Server start: http://127.0.0.1:3000/')
 })
 
 chat.run(http)
