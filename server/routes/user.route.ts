@@ -2,6 +2,7 @@ import auth from '../middleware/auth'
 import express from 'express'
 import {
   generateAuthToken,
+  getUserById,
   IUser,
   UserModel,
   validateUser,
@@ -13,7 +14,7 @@ import { SERVER_ERROR } from '../constants/error'
 const router = express.Router()
 
 router.get('/current', auth, async (req: RequestUser, res) => {
-  const user = await UserModel.findById(req.user.id).select('-password')
+  const user = await getUserById(req.user.id)
   res.send(user)
 })
 

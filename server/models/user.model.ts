@@ -17,11 +17,13 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
+  connectCount: Number,
 })
 
 export interface IUser extends Document {
   userName: string
   password: string
+  connectCount: number
 }
 
 export interface IUserJWTPayload {
@@ -56,4 +58,28 @@ export const generateAuthToken = user => {
  */
 export const verifyAuthToken = (token: string): IUserJWTPayload => {
   return jwt.verify(token, config.myprivatekey) as IUserJWTPayload
+}
+
+export const getUserById = async (userId: string): Promise<IUser> => {
+  return UserModel.findById(userId).select('-password')
+}
+
+export const incrementUserConnect = async (userId: string): Promise<void> => {
+  return UserModel.updateOne(
+    { _id: userId },
+    { $inc: { connectCount: 1 } }
+  ).exec()
+}
+
+export const decrementUserConnect = async (userId: string): Promise<void> => {
+  return UserModel.updateOne(
+    { _id: userId },
+    { $inc: { connectCount: -1 } }
+  ).exec()
+}
+
+export const hasUserConnect = async (userId: string): Promise<boolean> => {
+  const user = await UserModel.findById(userId, 'connectCount').exec()
+  console.log('connectCount: ', user.connectCount)
+  return user.connectCount > 0
 }
