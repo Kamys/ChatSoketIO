@@ -8,11 +8,12 @@ import {
 } from '../models/user.model'
 import { CustomRequest, RequestUser } from '../type'
 import { checkPassword, toHas } from '../utils/password'
+import { SERVER_ERROR } from '../constants/error'
 
 const router = express.Router()
 
 router.get('/current', auth, async (req: RequestUser, res) => {
-  const user = await UserModel.findById(req.user._id).select('-password')
+  const user = await UserModel.findById(req.user.id).select('-password')
   res.send(user)
 })
 
@@ -56,13 +57,13 @@ router.post('/login', async (req: RequestUser, res) => {
 
   const user = await UserModel.findOne({ userName: body.userName })
   if (!user) {
-    res.status(400).send('UserName not found')
+    res.status(400).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
     return
   }
 
   const isPasswordCorrect = await checkPassword(body.password, user.password)
   if (!isPasswordCorrect) {
-    res.status(401).send('Password incorrect')
+    res.status(401).send(SERVER_ERROR.PASSWORD_INCORRECT)
     return
   }
 

@@ -13,7 +13,7 @@ type UseUserResult = {
 export const useUser = (): UseUserResult => {
   const account = useStore(user.account)
   const [isLoading, setIsLoading] = useState(true)
-  const isLogin = !isNil(account)
+  const isLogin = !isNil(account) && hasToken()
 
   useEffect(() => {
     if (hasToken()) {
@@ -30,4 +30,8 @@ export const useUser = (): UseUserResult => {
     isLogin,
     isLoading,
   }
+}
+
+export const useDidMount = (callback: () => void) => {
+  useEffect(callback, [])
 }

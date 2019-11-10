@@ -11,3 +11,7 @@ export const getToken = (): string => {
 export const hasToken = (): boolean => {
   return !!getToken()
 }
+
+export const removeToken = () => {
+  localStorage.removeItem(TOKEN_KEY)
+}

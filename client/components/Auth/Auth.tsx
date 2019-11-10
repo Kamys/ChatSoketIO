@@ -75,7 +75,7 @@ const Auth: React.FC<Props> = () => {
   }, [form])
 
   const handleSingUp = useCallback(() => {
-    user.singUp(form).catch(error => {
+    user.createUser(form).catch(error => {
       if (error.response) {
         setError(error.response.data)
         return

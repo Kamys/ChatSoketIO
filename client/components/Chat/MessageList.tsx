@@ -23,14 +23,11 @@ const MessageList: React.FC<Props> = ({ chatItems }) => {
         Main chat
       </Header>
       <Comments>
-        {chatItems.map(chatItem => {
-          console.log(chatItem.id)
-          return (
-            <React.Fragment key={chatItem.id}>
-              {chatItem.reactNode}
-            </React.Fragment>
-          )
-        })}
+        {chatItems.map(chatItem => (
+          <React.Fragment key={chatItem.id}>
+            {chatItem.reactNode}
+          </React.Fragment>
+        ))}
       </Comments>
     </Comment.Group>
   )

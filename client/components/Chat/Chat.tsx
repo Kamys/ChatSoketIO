@@ -6,7 +6,9 @@ import { ChatItem, ChatMessage, ChatNotification } from './type'
 import Message from './Message'
 import { formatChatDate } from './utils'
 import MessageList from './MessageList'
-import { useUser } from '../../hooks'
+import { useDidMount } from '../../hooks'
+import { getToken } from '../../api/utils'
+import user from '../../store/user'
 
 type Props = {}
 
@@ -22,7 +24,10 @@ const InputStyled = styled.div`
   width: 100%;
 `
 
-const socket = socketIOClient()
+const socketUrl = 'http://localhost:3000'
+const socket = socketIOClient(socketUrl, {
+  autoConnect: false,
+})
 
 const Chat: React.FC<Props> = () => {
   const [message, setMessage] = useState<string>('')
@@ -34,11 +39,29 @@ const Chat: React.FC<Props> = () => {
     setMessage('')
   }, [message])
 
-  const { account } = useUser()
+  useDidMount(() => {
+    socket.on('connect', () => {
+      socket.emit('authentication', {
+        token: getToken(),
+      })
+    })
 
-  useEffect(() => {
-    socket.emit('initUser', { userName: account.userName })
-  }, [account.userName])
+    socket.on('authenticated', reason => {
+      console.log('Authenticated:', reason)
+    })
+
+    socket.on('unauthorized', reason => {
+      console.log('Unauthorized:', reason)
+      user.logout()
+      socket.disconnect()
+    })
+
+    socket.on('disconnect', reason => {
+      console.log(`Disconnected: ${reason}`)
+    })
+
+    socket.open()
+  })
 
   const handleKeyDown = useCallback(
     event => {

@@ -1,5 +1,6 @@
 import { createEffect, createStore } from 'effector'
 import { axiosInstance, initToken } from '../../api'
+import { removeToken } from '../../api/utils'
 
 export interface IUserLoginForm {
   userName: string
@@ -36,6 +37,12 @@ const login = createEffect<IUserLoginForm, ILoginResponse, void>('login', {
   },
 })
 
+const logout = createEffect<void, void, void>('logout', {
+  handler: () => {
+    removeToken()
+  },
+})
+
 const fetchAccount = createEffect<void, IUser, void>('fetchAccount', {
   handler: () => {
     return axiosInstance.get('users/current').then(response => response.data)
@@ -43,7 +50,6 @@ const fetchAccount = createEffect<void, IUser, void>('fetchAccount', {
 })
 
 login.done.watch(({ result }) => {
-  console.log('login: ', result)
   initToken(result.token)
 })
 
@@ -51,14 +57,20 @@ createUser.done.watch(({ result: { token } }) => {
   initToken(token)
 })
 
+fetchAccount.fail.watch(() => {
+  return logout()
+})
+
 const account = createStore<IUser>(null)
   .on(login.done, (_, action) => action.result.user)
   .on(createUser.done, (_, action) => action.result.user)
   .on(fetchAccount.done, (_, action) => action.result)
+  .on(logout.done, () => null)
 
 export default {
   login,
+  logout,
   account,
-  singUp: createUser,
+  createUser,
   fetchAccount,
 }

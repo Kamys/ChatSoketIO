@@ -17,13 +17,16 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
-  isAdmin: Boolean,
 })
 
 export interface IUser extends Document {
   userName: string
   password: string
-  isAdmin: boolean
+}
+
+export interface IUserJWTPayload {
+  id: string
+  userName: string
 }
 
 export const UserModel = mongoose.model<IUser>('User', UserSchema)
@@ -44,5 +47,13 @@ export const validateUser = user => {
 }
 
 export const generateAuthToken = user => {
-  return jwt.sign({ _id: user._id, isAdmin: user.isAdmin }, config.myprivatekey)
+  const userPayload: IUserJWTPayload = { id: user._id, userName: user.userName }
+  return jwt.sign(userPayload, config.myprivatekey)
+}
+
+/**
+ * @throws Error if token not verify
+ */
+export const verifyAuthToken = (token: string): IUserJWTPayload => {
+  return jwt.verify(token, config.myprivatekey) as IUserJWTPayload
 }
