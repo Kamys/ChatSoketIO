@@ -7,8 +7,8 @@ import Message from './Message'
 import { formatChatDate } from './utils'
 import MessageList from './MessageList'
 import { useDidMount } from '../../hooks'
-import { getToken } from '../../api/utils'
 import user from '../../store/user'
+import { getToken } from '../../api/utils'
 
 type Props = {}
 

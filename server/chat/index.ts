@@ -11,12 +11,15 @@ interface ISocketChat extends Socket {
 const run = (http: Server) => {
   const io = socketIo(http)
 
-  io.on('connection', (socket: ISocketChat) => {
+  const postAuthenticate = (socket: ISocketChat) => {
+    const { userName } = socket.user
+    io.emit('info', `${userName} joined the chat`)
+
     socket.on('sendMessage', msg => {
       const { userName } = socket.user
       io.emit('sendMessage', { userName, msg })
     })
-  })
+  }
 
   socketAuth(io, {
     authenticate: async (socket: ISocketChat, data, callback) => {
@@ -30,13 +33,14 @@ const run = (http: Server) => {
         return callback({ message: SERVER_ERROR.ACCESS_TOKEN_INVALID })
       }
     },
-    postAuthenticate: socket => {
-      const { userName } = socket.user
-      io.emit('info', `${userName} joined the chat`)
-    },
+    postAuthenticate,
     disconnect: socket => {
-      const { userName } = socket.user
-      io.emit('info', `${userName} left the chat`)
+      if (socket.user) {
+        const { userName } = socket.user
+        io.emit('info', `${userName} left the chat`)
+      } else {
+        console.log('Not auth user disconnect')
+      }
     },
   })
 }
