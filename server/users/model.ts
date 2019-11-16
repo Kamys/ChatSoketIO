@@ -1,8 +1,8 @@
-import config from '../config'
 import jwt from 'jsonwebtoken'
 import Joi from 'joi'
 import mongoose from 'mongoose'
 import { IUser, IUserJWTPayload } from './type'
+import config from '../config'
 
 const UserSchema = new mongoose.Schema({
   userName: {
@@ -64,7 +64,6 @@ const decrementConnect = async (userId: string): Promise<void> => {
 
 export const hasConnect = async (userId: string): Promise<boolean> => {
   const user = await Model.findById(userId, 'connectCount').exec()
-  console.log('connectCount: ', user.connectCount)
   return user.connectCount > 0
 }
 
