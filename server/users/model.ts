@@ -23,6 +23,13 @@ const UserSchema = new mongoose.Schema({
 
 const Model = mongoose.model<IUser>('User', UserSchema)
 
+const createModel = (userName: string, password: string) => {
+  return new Model({
+    userName,
+    password,
+  })
+}
+
 const validateUser = user => {
   const schema = {
     userName: Joi.string()
@@ -54,6 +61,10 @@ const getById = async (userId: string): Promise<IUser> => {
   return Model.findById(userId).select('-password')
 }
 
+const getByUserName = async (userName: string): Promise<IUser> => {
+  return Model.findById({ userName }).select('-password')
+}
+
 const incrementConnect = async (userId: string): Promise<void> => {
   return Model.updateOne({ _id: userId }, { $inc: { connectCount: 1 } }).exec()
 }
@@ -68,12 +79,13 @@ export const hasConnect = async (userId: string): Promise<boolean> => {
 }
 
 export default {
-  Model,
-  validateUser,
-  generateAuthToken,
-  verifyAuthToken,
+  createModel,
   getById,
+  getByUserName,
+  hasConnect,
+  validateUser,
+  verifyAuthToken,
   incrementConnect,
   decrementConnect,
-  hasConnect,
+  generateAuthToken,
 }

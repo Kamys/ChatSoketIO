@@ -5,22 +5,20 @@ import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 
 const create = async (req: CustomRequest<IUser>, res) => {
-  const { error } = User.validateUser(req.body)
+  const { body } = req
+  const { error } = User.validateUser(body)
   if (error) {
     res.status(400).send(error.details[0].message)
     return
   }
 
-  let user: IUser = await User.Model.findOne({ userName: req.body.userName })
+  let user: IUser = await User.getByUserName(body.userName)
   if (user) {
     res.status(400).send('User already registered.')
     return
   }
 
-  user = new User.Model({
-    userName: req.body.userName,
-    password: req.body.password,
-  })
+  user = User.createModel(body.userName, body.password)
   user.password = await utils.toHas(user.password)
   await user.save()
 
@@ -47,7 +45,7 @@ const login = async (req: RequestUser, res) => {
     return
   }
 
-  const user = await User.Model.findOne({ userName: body.userName })
+  const user = await User.getByUserName(body.userName)
   if (!user) {
     res.status(400).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
     return

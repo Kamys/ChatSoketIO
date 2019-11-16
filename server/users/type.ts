@@ -4,7 +4,7 @@ import { Params, ParamsDictionary, Request } from 'express-serve-static-core'
 export interface IUser extends Document {
   userName: string
   password: string
-  connectCount: number
+  connectCount?: number
 }
 
 export interface IUserJWTPayload {
