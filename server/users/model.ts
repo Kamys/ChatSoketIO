@@ -68,7 +68,7 @@ export const hasConnect = async (userId: string): Promise<boolean> => {
 }
 
 export default {
-  Model: Model,
+  Model,
   validateUser,
   generateAuthToken,
   verifyAuthToken,
