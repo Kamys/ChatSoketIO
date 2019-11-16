@@ -6,7 +6,7 @@ import { SERVER_ERROR } from '../constants/error'
 
 const create = async (req: CustomRequest<IUser>, res) => {
   const { body } = req
-  const { error } = User.validateUser(body)
+  const { error } = utils.validateUser(body)
   if (error) {
     res.status(400).send(error.details[0].message)
     return
@@ -22,7 +22,7 @@ const create = async (req: CustomRequest<IUser>, res) => {
   user.password = await utils.toHas(user.password)
   await user.save()
 
-  const token = User.generateAuthToken(user)
+  const token = utils.generateAuthToken(user)
   res.send({
     user: {
       id: user._id,
@@ -39,7 +39,7 @@ const getCurrent = async (req: RequestUser, res) => {
 
 const login = async (req: RequestUser, res) => {
   const { body } = req
-  const { error } = User.validateUser(body)
+  const { error } = utils.validateUser(body)
   if (error) {
     res.status(400).send(error.details[0].message)
     return
@@ -60,7 +60,7 @@ const login = async (req: RequestUser, res) => {
     return
   }
 
-  const token = User.generateAuthToken(user)
+  const token = utils.generateAuthToken(user)
   res.send({
     user: {
       id: user._id,

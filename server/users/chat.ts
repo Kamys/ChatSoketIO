@@ -2,6 +2,7 @@ import { Server } from 'http'
 import socketIo, { Socket } from 'socket.io'
 import socketAuth from 'socketio-auth'
 import User from './model'
+import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 import { IUserJWTPayload } from './type'
 
@@ -32,7 +33,7 @@ const run = (http: Server) => {
       const { token } = data
 
       try {
-        socket.user = User.verifyAuthToken(token)
+        socket.user = utils.verifyAuthToken(token)
 
         return callback(null, true)
       } catch (e) {

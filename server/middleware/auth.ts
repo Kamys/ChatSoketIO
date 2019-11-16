@@ -12,7 +12,7 @@ const auth: RequestHandler = (req: RequestUser, res, next) => {
 
   const token = tokenString.replace('Bearer ', '')
   try {
-    req.user = User.verifyAuthToken(token)
+    req.user = User.utils.verifyAuthToken(token)
     next()
   } catch (ex) {
     res.status(401).send(SERVER_ERROR.ACCESS_TOKEN_INVALID)

@@ -1,8 +1,5 @@
-import jwt from 'jsonwebtoken'
-import Joi from 'joi'
 import mongoose from 'mongoose'
-import { IUser, IUserJWTPayload } from './type'
-import config from '../config'
+import { IUser } from './type'
 
 const UserSchema = new mongoose.Schema({
   userName: {
@@ -30,39 +27,12 @@ const createModel = (userName: string, password: string) => {
   })
 }
 
-const validateUser = user => {
-  const schema = {
-    userName: Joi.string()
-      .min(3)
-      .max(50)
-      .required(),
-    password: Joi.string()
-      .min(3)
-      .max(255)
-      .required(),
-  }
-
-  return Joi.validate(user, schema)
-}
-
-const generateAuthToken = user => {
-  const userPayload: IUserJWTPayload = { id: user._id, userName: user.userName }
-  return jwt.sign(userPayload, config.myprivatekey)
-}
-
-/**
- * @throws Error if token not verify
- */
-const verifyAuthToken = (token: string): IUserJWTPayload => {
-  return jwt.verify(token, config.myprivatekey) as IUserJWTPayload
-}
-
-const getById = async (userId: string): Promise<IUser> => {
+const getById = async (userId: string): Promise<Omit<IUser, 'password'>> => {
   return Model.findById(userId).select('-password')
 }
 
 const getByUserName = async (userName: string): Promise<IUser> => {
-  return Model.findById({ userName }).select('-password')
+  return Model.findById({ userName })
 }
 
 const incrementConnect = async (userId: string): Promise<void> => {
@@ -83,9 +53,6 @@ export default {
   getById,
   getByUserName,
   hasConnect,
-  validateUser,
-  verifyAuthToken,
   incrementConnect,
   decrementConnect,
-  generateAuthToken,
 }
