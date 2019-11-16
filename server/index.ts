@@ -2,8 +2,7 @@ import express from 'express'
 import { createServer } from 'http'
 import path from 'path'
 import mongoose from 'mongoose'
-import chat from './chat'
-import usersRoute from './routes/user.route'
+import User from './users'
 import checkEnvironment from './utils/checkEnvironment'
 
 const app = express()
@@ -27,7 +26,7 @@ app.use((req, res, next) => {
 })
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../dist')))
-app.use('/api/users', usersRoute)
+app.use('/api/users', User.router)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'))
@@ -37,4 +36,4 @@ http.listen(3000, () => {
   console.log('Server start: http://127.0.0.1:3000/')
 })
 
-chat.run(http)
+User.chat.run(http)

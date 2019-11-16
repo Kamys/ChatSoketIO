@@ -8,3 +8,8 @@ export const checkPassword = async (
   password: string,
   hash: string
 ): Promise<boolean> => bcrypt.compare(password, hash)
+
+export default {
+  toHas,
+  checkPassword,
+}

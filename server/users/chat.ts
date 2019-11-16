@@ -1,14 +1,9 @@
 import { Server } from 'http'
 import socketIo, { Socket } from 'socket.io'
 import socketAuth from 'socketio-auth'
-import {
-  decrementUserConnect,
-  hasUserConnect,
-  incrementUserConnect,
-  IUserJWTPayload,
-  verifyAuthToken,
-} from '../models/user.model'
+import User from './model'
 import { SERVER_ERROR } from '../constants/error'
+import { IUserJWTPayload } from './type'
 
 interface ISocketChat extends Socket {
   user: IUserJWTPayload
@@ -19,8 +14,8 @@ const run = (http: Server) => {
 
   const postAuthenticate = async (socket: ISocketChat) => {
     const { userName, id } = socket.user
-    const hasOtherConnection = await hasUserConnect(id)
-    await incrementUserConnect(id)
+    const hasOtherConnection = await User.hasConnect(id)
+    await User.incrementConnect(id)
 
     if (!hasOtherConnection) {
       io.emit('info', `${userName} joined the chat`)
@@ -37,7 +32,7 @@ const run = (http: Server) => {
       const { token } = data
 
       try {
-        socket.user = verifyAuthToken(token)
+        socket.user = User.verifyAuthToken(token)
 
         return callback(null, true)
       } catch (e) {
@@ -48,8 +43,8 @@ const run = (http: Server) => {
     disconnect: async socket => {
       if (socket.user) {
         const { userName, id } = socket.user
-        await decrementUserConnect(id)
-        const hasOtherConnection = await hasUserConnect(id)
+        await User.decrementConnect(id)
+        const hasOtherConnection = await User.hasConnect(id)
         if (!hasOtherConnection) {
           io.emit('info', `${userName} left the chat`)
         }
