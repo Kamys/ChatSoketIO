@@ -1,7 +1,6 @@
 import { Server } from 'http'
 import socketIo, { Socket } from 'socket.io'
 import socketAuth from 'socketio-auth'
-import User from './model'
 import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 import { IUserJWTPayload } from './type'
@@ -14,13 +13,8 @@ const run = (http: Server) => {
   const io = socketIo(http)
 
   const postAuthenticate = async (socket: ISocketChat) => {
-    const { userName, id } = socket.user
-    const hasOtherConnection = await User.hasConnect(id)
-    await User.incrementConnect(id)
-
-    if (!hasOtherConnection) {
-      io.emit('info', `${userName} joined the chat`)
-    }
+    const { userName } = socket.user
+    io.emit('info', `${userName} joined the chat`)
 
     socket.on('sendMessage', msg => {
       const { userName } = socket.user
@@ -43,12 +37,8 @@ const run = (http: Server) => {
     postAuthenticate,
     disconnect: async socket => {
       if (socket.user) {
-        const { userName, id } = socket.user
-        await User.decrementConnect(id)
-        const hasOtherConnection = await User.hasConnect(id)
-        if (!hasOtherConnection) {
-          io.emit('info', `${userName} left the chat`)
-        }
+        const { userName } = socket.user
+        io.emit('info', `${userName} left the chat`)
       } else {
         console.log('Not auth user disconnect')
       }

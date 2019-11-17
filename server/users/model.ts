@@ -15,7 +15,6 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
   },
-  connectCount: Number,
 })
 
 const Model = mongoose.model<IUser>('User', UserSchema)
@@ -32,27 +31,11 @@ const getById = async (userId: string): Promise<Omit<IUser, 'password'>> => {
 }
 
 const getByUserName = async (userName: string): Promise<IUser> => {
-  return Model.findById({ userName })
-}
-
-const incrementConnect = async (userId: string): Promise<void> => {
-  return Model.updateOne({ _id: userId }, { $inc: { connectCount: 1 } }).exec()
-}
-
-const decrementConnect = async (userId: string): Promise<void> => {
-  return Model.updateOne({ _id: userId }, { $inc: { connectCount: -1 } }).exec()
-}
-
-export const hasConnect = async (userId: string): Promise<boolean> => {
-  const user = await Model.findById(userId, 'connectCount').exec()
-  return user.connectCount > 0
+  return Model.findOne({ userName })
 }
 
 export default {
   createModel,
   getById,
   getByUserName,
-  hasConnect,
-  incrementConnect,
-  decrementConnect,
 }

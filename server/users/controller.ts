@@ -44,7 +44,6 @@ const login = async (req: RequestUser, res) => {
     res.status(400).send(error.details[0].message)
     return
   }
-
   const user = await User.getByUserName(body.userName)
   if (!user) {
     res.status(400).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
