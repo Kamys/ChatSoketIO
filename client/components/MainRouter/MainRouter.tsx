@@ -6,9 +6,10 @@ import { ROUT_URL } from './constants'
 import Auth from '../Auth'
 import { useUser } from '../../hooks'
 import { Private } from './Private'
-import Chat from '../Chat/Chat'
+import { MainPage } from '../MainPage/MainPage'
+import PrivateRouter from './PrivateRouter'
 
-const PageContained = styled.div`
+const Center = styled.div`
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -26,19 +27,19 @@ const MainRouter: React.FC<Props> = () => {
 
   return (
     <BrowserRouter>
-      <PageContained>
-        <Switch>
-          <Route path={ROUT_URL.Login}>
-            <RedirectConditional isRedirect={isLogin} to={ROUT_URL.Home}>
+      <Switch>
+        <Route path={ROUT_URL.Login}>
+          <RedirectConditional isRedirect={isLogin} to={ROUT_URL.Home}>
+            <Center>
               <Auth />
-            </RedirectConditional>
-          </Route>
-          <Private path={ROUT_URL.Home}>
-            <Chat />
-          </Private>
-          <Route>404</Route>
-        </Switch>
-      </PageContained>
+            </Center>
+          </RedirectConditional>
+        </Route>
+        <Private path={ROUT_URL.Home}>
+          <PrivateRouter />
+        </Private>
+        <Route>404</Route>
+      </Switch>
     </BrowserRouter>
   )
 }

@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import socketIOClient from 'socket.io-client'
 import { Input, Message as MessageInfo } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { useParams } from 'react-router-dom'
 import { ChatItem, ChatMessage, ChatNotification } from './type'
 import Message from './Message'
 import { formatChatDate } from './utils'
 import MessageList from './MessageList'
 import { useDidMount } from '../../hooks'
-import user from '../../store/user'
-import { getToken } from '../../api/utils'
+import chat from '../../chat'
 
 type Props = {}
 
@@ -24,58 +23,39 @@ const InputStyled = styled.div`
   width: 100%;
 `
 
-const socketUrl = 'http://localhost:3000'
-const socket = socketIOClient(socketUrl, {
-  autoConnect: false,
-})
-
 const Chat: React.FC<Props> = () => {
   const [message, setMessage] = useState<string>('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [notifications, setNotification] = useState<ChatNotification[]>([])
-
-  const handlerSend = useCallback(() => {
-    socket.emit('sendMessage', message)
-    setMessage('')
-  }, [message])
+  const { chatId } = useParams<{ chatId: string }>()
 
   useDidMount(() => {
-    socket.on('connect', () => {
-      socket.emit('authentication', {
-        token: getToken(),
-      })
-    })
-
-    socket.on('authenticated', reason => {
-      console.log('Authenticated:', reason)
-    })
-
-    socket.on('unauthorized', reason => {
-      console.log('Unauthorized:', reason)
-      user.logout()
-      socket.disconnect()
-    })
-
-    socket.on('disconnect', reason => {
-      console.log(`Disconnected: ${reason}`)
-    })
-
-    socket.open()
+    chat.init()
   })
+
+  const handlerSend = useCallback(() => {
+    chat.sendMessage({ to: chatId, msg: message })
+    setMessage('')
+  }, [chatId, message])
+
+  useDidMount(() => {})
 
   const handleKeyDown = useCallback(
     event => {
       if (event.key === 'Enter') {
         event.preventDefault()
-        socket.emit('sendMessage', message)
+        chat.sendMessage({ to: chatId, msg: message })
         setMessage('')
       }
     },
-    [message]
+    [chatId, message]
   )
 
   useEffect(() => {
-    socket.on('sendMessage', ({ userName, msg }) => {
+    chat.handleSendMessage(({ name, msg }) => {
+      if (name !== chatId) {
+        return
+      }
       setMessages([
         ...messages,
         {
@@ -84,12 +64,12 @@ const Chat: React.FC<Props> = () => {
           dataCreated: new Date().toString(),
           userAvatar:
             'https://react.semantic-ui.com/images/avatar/small/matt.jpg',
-          userName: userName,
+          name: name,
         },
       ])
     })
 
-    socket.on('info', msg => {
+    chat.handleSendInfo(msg => {
       setNotification([
         ...notifications,
         {
@@ -101,10 +81,7 @@ const Chat: React.FC<Props> = () => {
       ])
     })
 
-    return () => {
-      socket.off('sendMessage')
-      socket.off('info')
-    }
+    return chat.closeAllHandler
   }, [messages, notifications])
 
   const chatItems = useMemo<ChatItem[]>(() => {
@@ -116,7 +93,7 @@ const Chat: React.FC<Props> = () => {
           id={message.id}
           dataCreated={formatChatDate(message.dataCreated)}
           text={message.text}
-          userName={message.userName}
+          name={message.name}
           userAvatar={message.userAvatar}
         />
       ),

@@ -56,7 +56,7 @@ const useForm = <T extends {}>(
 const Auth: React.FC<Props> = () => {
   const [error, setError] = useState<string>()
   const [form, onChange] = useForm({
-    userName: '',
+    name: '',
     password: '',
   })
 
@@ -94,10 +94,10 @@ const Auth: React.FC<Props> = () => {
           <StyledForm>
             <Form.Field>
               <input
-                value={form.userName}
+                value={form.name}
                 onChange={onChange}
-                name="userName"
-                placeholder="UserName"
+                name="name"
+                placeholder="User name"
               />
             </Form.Field>
             <Form.Field>

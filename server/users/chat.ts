@@ -9,16 +9,26 @@ interface ISocketChat extends Socket {
   user: IUserJWTPayload
 }
 
+const user = {}
+
 const run = (http: Server) => {
   const io = socketIo(http)
 
-  const postAuthenticate = async (socket: ISocketChat) => {
-    const { userName } = socket.user
-    io.emit('info', `${userName} joined the chat`)
+  const getSocketByName = (name: string): ISocketChat => {
+    const socketId = user[name]
+    return io.sockets.sockets[socketId] as ISocketChat
+  }
 
-    socket.on('sendMessage', msg => {
-      const { userName } = socket.user
-      io.emit('sendMessage', { userName, msg })
+  const postAuthenticate = async (socket: ISocketChat) => {
+    socket.on('sendMessage', message => {
+      const { name } = socket.user
+      const toSocket = getSocketByName(message.to)
+      if (!toSocket) {
+        return
+      }
+      const newMessages = { name, msg: message.msg, to: message.to }
+      toSocket.emit('sendMessage', newMessages)
+      socket.emit('sendMessage', newMessages)
     })
   }
 
@@ -28,21 +38,14 @@ const run = (http: Server) => {
 
       try {
         socket.user = utils.verifyAuthToken(token)
-
+        user[socket.user.name] = socket.id
         return callback(null, true)
       } catch (e) {
         return callback({ message: SERVER_ERROR.ACCESS_TOKEN_INVALID })
       }
     },
     postAuthenticate,
-    disconnect: async socket => {
-      if (socket.user) {
-        const { userName } = socket.user
-        io.emit('info', `${userName} left the chat`)
-      } else {
-        console.log('Not auth user disconnect')
-      }
-    },
+    disconnect: async () => {},
   })
 }
 

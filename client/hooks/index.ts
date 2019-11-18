@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useStore } from 'effector-react'
 import isNil from 'lodash/isNil'
-import user, { IUser } from '../store/user'
+import user from '../store/user'
 import { hasToken } from '../api/utils'
+import { IUser } from '../store/user/user'
 
 type UseUserResult = {
   isLogin: boolean
@@ -11,7 +12,7 @@ type UseUserResult = {
 }
 
 export const useUser = (): UseUserResult => {
-  const account = useStore(user.account)
+  const account = useStore(user.storeAccount)
   const [isLoading, setIsLoading] = useState(true)
   const isLogin = !isNil(account) && hasToken()
 

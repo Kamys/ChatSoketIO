@@ -12,13 +12,13 @@ const create = async (req: CustomRequest<IUser>, res) => {
     return
   }
 
-  let user: IUser = await User.getByUserName(body.userName)
+  let user: IUser = await User.getByName(body.name)
   if (user) {
     res.status(400).send('User already registered.')
     return
   }
 
-  user = User.createModel(body.userName, body.password)
+  user = User.createModel(body.name, body.password)
   user.password = await utils.toHas(user.password)
   await user.save()
 
@@ -26,7 +26,7 @@ const create = async (req: CustomRequest<IUser>, res) => {
   res.send({
     user: {
       id: user._id,
-      userName: user.userName,
+      name: user.name,
     },
     token,
   })
@@ -34,7 +34,7 @@ const create = async (req: CustomRequest<IUser>, res) => {
 
 const getCurrent = async (req: RequestUser, res) => {
   const user = await User.getById(req.user.id)
-  res.send(user)
+  res.send(utils.toView(user))
 }
 
 const login = async (req: RequestUser, res) => {
@@ -44,7 +44,7 @@ const login = async (req: RequestUser, res) => {
     res.status(400).send(error.details[0].message)
     return
   }
-  const user = await User.getByUserName(body.userName)
+  const user = await User.getByName(body.name)
   if (!user) {
     res.status(400).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
     return
@@ -61,12 +61,14 @@ const login = async (req: RequestUser, res) => {
 
   const token = utils.generateAuthToken(user)
   res.send({
-    user: {
-      id: user._id,
-      userName: user.userName,
-    },
+    user: utils.toView(user),
     token,
   })
 }
 
-export { create, getCurrent, login }
+const getAllContacts = async (req: RequestUser, res) => {
+  const allUser = await User.getAllContacts(req.user.id)
+  res.send(allUser.map(utils.toView))
+}
+
+export { create, getCurrent, login, getAllContacts }

@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { IUserJWTPayload } from './type'
+import { IUser, IUserJWTPayload, IViewUser } from './type'
 import config from '../config'
 
 export const toHas = async (password: string): Promise<string> => {
@@ -15,7 +15,7 @@ export const checkPassword = async (
 
 const validateUser = user => {
   const schema = {
-    userName: Joi.string()
+    name: Joi.string()
       .min(3)
       .max(50)
       .required(),
@@ -29,7 +29,7 @@ const validateUser = user => {
 }
 
 const generateAuthToken = user => {
-  const userPayload: IUserJWTPayload = { id: user._id, userName: user.userName }
+  const userPayload: IUserJWTPayload = { id: user._id, name: user.name }
   return jwt.sign(userPayload, config.myprivatekey)
 }
 
@@ -40,8 +40,16 @@ const verifyAuthToken = (token: string): IUserJWTPayload => {
   return jwt.verify(token, config.myprivatekey) as IUserJWTPayload
 }
 
+const toView = (user: Omit<IUser, 'password'>): IViewUser => {
+  return {
+    id: user._id,
+    name: user.name,
+  }
+}
+
 export default {
   toHas,
+  toView,
   checkPassword,
   validateUser,
   generateAuthToken,

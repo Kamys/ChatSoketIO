@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { IUser } from './type'
 
 const UserSchema = new mongoose.Schema({
-  userName: {
+  name: {
     type: String,
     unique: true,
     required: true,
@@ -19,9 +19,9 @@ const UserSchema = new mongoose.Schema({
 
 const Model = mongoose.model<IUser>('User', UserSchema)
 
-const createModel = (userName: string, password: string) => {
+const createModel = (name: string, password: string) => {
   return new Model({
-    userName,
+    name,
     password,
   })
 }
@@ -30,12 +30,17 @@ const getById = async (userId: string): Promise<Omit<IUser, 'password'>> => {
   return Model.findById(userId).select('-password')
 }
 
-const getByUserName = async (userName: string): Promise<IUser> => {
-  return Model.findOne({ userName })
+const getByName = async (name: string): Promise<IUser> => {
+  return Model.findOne({ name })
+}
+
+const getAllContacts = async (userId: string) => {
+  return Model.find({ _id: { $nin: userId } })
 }
 
 export default {
   createModel,
   getById,
-  getByUserName,
+  getByName,
+  getAllContacts,
 }
