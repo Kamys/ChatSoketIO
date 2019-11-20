@@ -1,5 +1,25 @@
-import { Request } from 'express-serve-static-core'
+import { Params, ParamsDictionary, Request } from 'express-serve-static-core'
+import { IUserJWTPayload } from './users/type'
 
-export interface CustomRequest<T> extends Request {
+type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
+
+export type RequestUser<P extends Params = ParamsDictionary> = Request<P> & {
+  user: IUserJWTPayload
+}
+
+/**
+ * Without user
+ */
+export interface UnAuthRequest<T = {}> extends Request {
   body: T
 }
+
+/**
+ * With user
+ */
+export type UserRequest<T = {}> = Merge<
+  RequestUser,
+  {
+    body: T
+  }
+>

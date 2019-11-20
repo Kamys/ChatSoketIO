@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { SERVER_ERROR } from '../constants/error'
-import { RequestUser } from '../users/type'
 import User from '../users'
+import { RequestUser } from '../type'
 
 const auth: RequestHandler = (req: RequestUser, res, next) => {
   const tokenString = req.headers.authorization as string

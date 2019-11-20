@@ -1,10 +1,10 @@
-import { CustomRequest } from '../type'
-import { IUser, RequestUser } from './type'
+import { RequestUser, UnAuthRequest } from '../type'
+import { IUser } from './type'
 import User from './model'
 import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 
-const create = async (req: CustomRequest<IUser>, res) => {
+const create = async (req: UnAuthRequest<IUser>, res) => {
   const { body } = req
   const { error } = utils.validateUser(body)
   if (error) {

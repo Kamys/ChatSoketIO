@@ -1,7 +1,7 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import { IUser } from './type'
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: {
     type: String,
     unique: true,
