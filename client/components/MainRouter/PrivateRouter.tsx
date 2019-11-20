@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { ROUT_URL } from './constants'
 import { MainPage } from '../MainPage/MainPage'
-import Chat from '../Chat/Chat'
+import { ChatPersonal } from '../../container/Chat'
 type Props = {}
 
 const PrivateRouter: React.FC<Props> = () => {
@@ -13,7 +13,7 @@ const PrivateRouter: React.FC<Props> = () => {
       </Route>
       <Route exact path={ROUT_URL.Chat}>
         <MainPage>
-          <Chat />
+          <ChatPersonal />
         </MainPage>
       </Route>
     </Switch>
