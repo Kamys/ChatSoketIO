@@ -26,7 +26,7 @@ export const ListUser: React.FC<Props> = () => {
   const handleSelectUser = useCallback(
     (id: string) => {
       const selectedUser = listUser.find(user => user.id === id)
-      history.push(`/${selectedUser.name}`)
+      history.push(`/${selectedUser.id}`)
     },
     [history, listUser]
   )

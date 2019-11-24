@@ -4,7 +4,7 @@ import { createPersonal, myChats } from './controller'
 
 const router = express.Router()
 
-router.get('/createPersonal', auth, createPersonal)
+router.post('/createPersonal', auth, createPersonal)
 
 router.get('/current', auth, myChats)
 
