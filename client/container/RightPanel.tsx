@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import Chat from '../store/chats'
 import User from '../store/user'
 import { getChatByMember } from '../store/chats/utils'
+import ChatPersonal from './Chat'
 
 type Props = {}
 
@@ -17,7 +18,9 @@ export const RightPanel: React.FC<Props> = () => {
     Chat.getChat({ memberId: chatId })
   }, [chatId])
 
-  return (
-    <div>Чат активен {privateChat && privateChat.id}</div>
-  )
+  if (!privateChat) {
+    return <div>Loading...</div>
+  }
+
+  return <ChatPersonal chatId={privateChat.id} />
 }

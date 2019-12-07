@@ -22,6 +22,7 @@ mongoose
   .catch(err => console.error('Could not connect to MongoDB...', err))
 
 app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization')
   next()
 })

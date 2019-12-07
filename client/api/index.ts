@@ -3,8 +3,10 @@ import { getToken, setToken } from './utils'
 
 const savedToken = getToken()
 
+export const baseURL = 'http://192.168.8.100:3000/'
+
 export const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:3000/api/',
+  baseURL: `${baseURL}api/`,
   headers: {
     ...(savedToken && { Authorization: `Bearer ${savedToken}` }),
   },

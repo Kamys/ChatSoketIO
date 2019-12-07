@@ -20,8 +20,3 @@ export type ChatNotification = {
   isPositive: boolean
   dataCreated: string
 }
-
-export enum ChatItemType {
-  Message = 'Message',
-  Notification = 'Notification',
-}

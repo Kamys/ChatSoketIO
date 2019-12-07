@@ -1,11 +1,22 @@
 import * as React from 'react'
 import { Comment } from 'semantic-ui-react'
 import { ChatMessage } from './type'
+import styled from 'styled-components'
 
-const Message: React.FC<ChatMessage> = props => {
-  const { userAvatar, name, dataCreated, text } = props
+const Content = styled.div`
+  &&& {
+    background-color: rgba(0,0,0,.05);
+  }
+`
+
+type Props = ChatMessage & {
+  isYour?: boolean
+}
+
+const Message: React.FC<Props> = props => {
+  const { userAvatar, name, dataCreated, text, isYour } = props
   return (
-    <Comment>
+    <Comment as={isYour && Content}>
       <Comment.Avatar src={userAvatar} />
       <Comment.Content>
         <Comment.Author as="a">{name}</Comment.Author>

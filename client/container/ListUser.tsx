@@ -8,7 +8,7 @@ import user from '../store/user'
 
 type Props = {}
 
-export const ListUser: React.FC<Props> = () => {
+const ListUser: React.FC<Props> = () => {
   const listUser = useStore(user.storeList)
   useDidMount(() => {
     user.getAll()
@@ -38,3 +38,5 @@ export const ListUser: React.FC<Props> = () => {
     </>
   )
 }
+
+export default ListUser

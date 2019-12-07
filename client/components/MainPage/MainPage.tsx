@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ListUser } from '../../container/ListUser'
+import ListUser from '../../container/ListUser'
 
 type Props = {}
 

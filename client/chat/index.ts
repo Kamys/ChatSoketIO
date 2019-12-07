@@ -1,9 +1,9 @@
 import socketIOClient from 'socket.io-client'
 import { getToken } from '../api/utils'
 import user from '../store/user'
+import { baseURL } from '../api'
 
-const socketUrl = 'http://localhost:3000'
-const socket = socketIOClient(socketUrl, {
+const socket = socketIOClient(baseURL, {
   autoConnect: false,
 })
 
@@ -32,7 +32,7 @@ const init = () => {
 }
 
 type Messages = {
-  to: string
+  chatId: string
   msg: string
 }
 

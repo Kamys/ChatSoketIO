@@ -4,6 +4,8 @@ import socketAuth from 'socketio-auth'
 import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 import { IUserJWTPayload } from './type'
+import Chats from '../chats'
+import { IChat } from '../chats/type'
 
 interface ISocketChat extends Socket {
   user: IUserJWTPayload
@@ -14,21 +16,32 @@ const user = {}
 const run = (http: Server) => {
   const io = socketIo(http)
 
-  const getSocketByName = (name: string): ISocketChat => {
-    const socketId = user[name]
+  const getSocketById = (userId: string): ISocketChat => {
+    const socketId = user[userId]
     return io.sockets.sockets[socketId] as ISocketChat
   }
 
   const postAuthenticate = async (socket: ISocketChat) => {
-    socket.on('sendMessage', message => {
+    socket.on('sendMessage', async message => {
       const { name } = socket.user
-      const toSocket = getSocketByName(message.to)
-      if (!toSocket) {
+      const chat: IChat = await Chats.findById(message.chatId)
+      if (!chat) {
         return
       }
-      const newMessages = { name, msg: message.msg, to: message.to }
-      toSocket.emit('sendMessage', newMessages)
-      socket.emit('sendMessage', newMessages)
+      chat.memberIds.forEach(memberId => {
+        const toSocket = getSocketById(memberId)
+        if (!toSocket) {
+          return
+        }
+        const newMessages = {
+          id: new Date().valueOf(),
+          dateCreated: new Date().toString(),
+          userName: name,
+          text: message.msg,
+          chatId: message.chatId,
+        }
+        toSocket.emit('sendMessage', newMessages)
+      })
     })
   }
 
@@ -38,7 +51,7 @@ const run = (http: Server) => {
 
       try {
         socket.user = utils.verifyAuthToken(token)
-        user[socket.user.name] = socket.id
+        user[socket.user.id] = socket.id
         return callback(null, true)
       } catch (e) {
         return callback({ message: SERVER_ERROR.ACCESS_TOKEN_INVALID })
