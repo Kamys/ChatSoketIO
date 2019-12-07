@@ -9,7 +9,7 @@
     "module": "commonjs",
     "target": "es2019",
     "outDir": "./build",
-    "rootDir": "src",
+    "rootDir": "./",
     "lib": [
       "es2019",
       "dom"
@@ -35,7 +35,8 @@
     "experimentalDecorators": true
   },
   "include": [
-    "src",
+    "server",
+    "client",
     "type"
   ],
   "exclude": [
