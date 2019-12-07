@@ -1,10 +1,16 @@
 import { UserRequest } from '../type'
 import Chat from './model'
+import utils from './utils'
 import Users from '../users'
 import mongoose from 'mongoose'
+import { IChat } from './type'
 
 type ChatCreateBody = {
   memberId: string
+}
+
+const isValidId = (id: string) => {
+  return mongoose.Types.ObjectId.isValid(id)
 }
 
 const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
@@ -14,7 +20,7 @@ const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
     res.status(400).send('memberId is required field')
     return
   }
-  if (!mongoose.Types.ObjectId.isValid(body.memberId)) {
+  if (!isValidId(body.memberId)) {
     res.status(400).send(`Not correct id: ${body.memberId}`)
     return
   }
@@ -28,9 +34,35 @@ const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
   res.status(200).send(chatSaved)
 }
 
+const getChat = async (req: UserRequest<void, ChatCreateBody>, res) => {
+  const { user, query } = req
+  //TODO: Extract validation in middleware
+  if (!query.memberId) {
+    res.status(400).send('memberId is required field')
+    return
+  }
+  if (!isValidId(query.memberId)) {
+    res.status(400).send(`Not correct id: ${query.memberId}`)
+    return
+  }
+  const member = await Users.getById(query.memberId)
+  if (!member) {
+    res.status(400).send(`Member with id ${query.memberId} not found`)
+    return
+  }
+  const existingChat: IChat = await Chat.findOneByMember([req.user.id, query.memberId])
+  if (existingChat) {
+    res.status(200).send(utils.toView(existingChat))
+    return
+  }
+  const chat = Chat.createModel({ memberIds: [member._id, user.id] })
+  const chatSaved = await chat.save()
+  res.status(200).send(utils.toView(chatSaved))
+}
+
 const myChats = async (req: UserRequest, res) => {
   const currentChat = await Chat.findByMember([req.user.id])
   res.status(200).send(currentChat)
 }
 
-export { createPersonal, myChats }
+export { createPersonal, myChats, getChat }

@@ -24,8 +24,13 @@ const findByMember = async (memberIds: string[]) => {
   return Model.find({ memberIds: { $all: memberIds } })
 }
 
+const findOneByMember = async (memberIds: string[]) => {
+  return Model.findOne({ memberIds: { $all: memberIds } })
+}
+
 export default {
   createModel,
   findByMember,
   findById,
+  findOneByMember,
 }

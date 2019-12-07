@@ -17,9 +17,10 @@ export interface UnAuthRequest<T = {}> extends Request {
 /**
  * With user
  */
-export type UserRequest<T = {}> = Merge<
+export type UserRequest<T = {}, P = {}> = Merge<
   RequestUser,
   {
     body: T
+    query: P
   }
 >

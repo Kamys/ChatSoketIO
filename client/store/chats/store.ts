@@ -8,13 +8,13 @@ const getAll = createEffect<void, Chat[], void>('getAll', {
   },
 })
 
-type CreateChatPayload = {
+type GetChatPayload = {
   memberId: string
 }
 
-const createChat = createEffect<CreateChatPayload, Chat, void>('createChat', {
+const getChat = createEffect<GetChatPayload, Chat, void>('getChat', {
   handler: (params) => {
-    return axiosInstance.post('chats/createPersonal', params).then(response => response.data)
+    return axiosInstance.get('chats/getChat', { params: params }).then(response => response.data)
   },
 })
 
@@ -23,12 +23,12 @@ const storeChats = createStore<Chat[]>([]).on(
   (state, payload) => payload.result
 )
   .on(
-    createChat.done,
+    getChat.done,
     (state, payload) => [...state, payload.result]
   )
 
 export default {
   storeChats,
   getAll,
-  createChat,
+  getChat,
 }
