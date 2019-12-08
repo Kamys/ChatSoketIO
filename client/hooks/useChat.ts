@@ -9,16 +9,16 @@ const useChat = (chatId: string) => {
   const storeMessage: IDictionary<Array<ChatElement>> = useStore(Message.store)
 
   useEffect(() => {
-    chat.handleSendMessage(({ userName, text }) => {
+    chat.handleSendMessage((messages) => {
       Message.receiveMessage({
         id: new Date().valueOf().toString(),
-        text,
+        text: messages.text,
         dateCreated: new Date().toString(),
         userAvatar:
           'https://react.semantic-ui.com/images/avatar/small/matt.jpg',
-        userName,
+        userName: messages.userName,
         type: ItemType.Message,
-        chatId,
+        chatId: messages.chatId,
       })
     })
 
