@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'semantic-ui-react'
+import { Header, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { ChatItem } from './type'
 import MessageList from './MessageList'
@@ -13,15 +13,37 @@ type Props = {
 }
 
 const ChatContainer = styled.div`
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-areas:
+    'title'
+    'content'
+    'controls';
+  grid-template-rows: 25px 1fr 70px;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+  height: 100%;
+  max-height: 100vh;
+  padding: 10px;
 `
 
-const InputStyled = styled.div`
-  width: 100%;
+const Title = styled.h3`
+  &&& {
+    grid-area: title;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`
+const Content = styled.div`
+  &&& {
+    grid-area: content;
+    min-width: 100%;
+    padding-right: 10px;
+    margin: 0;
+    overflow: auto;
+  }
+`
+const Controls = styled.div`
+  grid-area: controls;
 `
 
 const Chat: React.FC<Props> = props => {
@@ -29,9 +51,12 @@ const Chat: React.FC<Props> = props => {
 
   return (
     <ChatContainer>
-      <MessageList chatItems={items} />
+      <Header as={Title} dividing>
+        Main chat
+      </Header>
+      <MessageList as={Content} chatItems={items} />
       <Input
-        as={InputStyled}
+        as={Controls}
         value={message}
         onKeyDown={onKeyDown}
         onChange={event => onChangeMessages(event.currentTarget.value)}

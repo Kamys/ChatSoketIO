@@ -5,21 +5,22 @@ import ListUser from '../../container/ListUser'
 type Props = {}
 
 const Container = styled.div`
-  padding: 10px;
-  display: flex;
+    display: grid;
+    grid-template-areas:
+            'leftPanel MainContent';
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 5fr;
+    grid-gap: 10px;
+    height: 100vh;
 `
 
 const LeftPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  grid-area: leftPanel;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 `
 
 const MainContent = styled.div`
-  padding-left: 10px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 5;
+  grid-area: MainContent;
 `
 
 export const MainPage: React.FC<Props> = ({ children }) => {

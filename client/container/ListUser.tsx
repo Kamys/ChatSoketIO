@@ -5,6 +5,14 @@ import { useHistory } from 'react-router-dom'
 import { Item, Items } from '../components/Items/Items'
 import { useDidMount } from '../hooks'
 import user from '../store/user'
+import styled from 'styled-components'
+
+const Title = styled.h3`
+  &&& {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+`
 
 type Props = {}
 
@@ -33,7 +41,7 @@ const ListUser: React.FC<Props> = () => {
 
   return (
     <>
-      <Header as="h2">List user</Header>
+      <Header as={Title}>List user</Header>
       <Items items={items} onSelect={handleSelectUser} />
     </>
   )

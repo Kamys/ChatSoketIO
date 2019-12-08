@@ -81,7 +81,7 @@ const ChatPersonal: React.FC<Props> = props => {
       const secondTime = new Date(second.dataCreated).valueOf()
       return firstTime - secondTime
     })
-  }, [messages])
+  }, [account.name, messages])
 
   return (
     <Chat
