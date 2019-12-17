@@ -21,7 +21,8 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "src/*": [ "src/*" ]
+      "server/*": [ "server/*" ],
+      "client/*": [ "client/*" ]
     },
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,

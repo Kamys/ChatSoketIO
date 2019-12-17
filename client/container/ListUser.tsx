@@ -1,11 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStore } from 'effector-react'
 import { Header } from 'semantic-ui-react'
+import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
+
 import { Item, Items } from '../components/Items/Items'
 import { useDidMount } from '../hooks'
 import user from '../store/user'
-import styled from 'styled-components'
+import { useSelectedUser } from 'client/hooks/user'
+import { IUser } from '@client/store/user/user'
 
 const Title = styled.h3`
   &&& {
@@ -22,6 +25,7 @@ const ListUser: React.FC<Props> = () => {
     user.getAll()
   })
   const history = useHistory()
+  const selectedUser: IUser = useSelectedUser()
 
   const items = useMemo((): Item[] => {
     return listUser.map(user => ({
@@ -42,7 +46,7 @@ const ListUser: React.FC<Props> = () => {
   return (
     <>
       <Header as={Title}>List user</Header>
-      <Items items={items} onSelect={handleSelectUser} />
+      <Items items={items} onChange={handleSelectUser} value={selectedUser?.id} />
     </>
   )
 }

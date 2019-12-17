@@ -4,10 +4,9 @@ import styled from 'styled-components'
 import RedirectConditional from './RedirectConditional'
 import { ROUT_URL } from './constants'
 import Auth from '../Auth'
-import { useUser } from '../../hooks'
 import { Private } from './Private'
-import { MainPage } from '../MainPage/MainPage'
 import PrivateRouter from './PrivateRouter'
+import { useUser } from 'client/hooks/user'
 
 const Center = styled.div`
   height: 100vh;

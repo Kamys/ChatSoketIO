@@ -11,6 +11,15 @@ const Item = styled.div`
   }
 `
 
+const ItemActive = styled(Item)`
+  &&&& {
+    background-color: lightskyblue;
+    :hover {
+      background-color: lightskyblue;
+    }
+  }
+`
+
 export type Item = {
   id: string
   imageSrc?: string
@@ -20,22 +29,28 @@ export type Item = {
 
 type Props = {
   items: Item[]
-  onSelect?: (id: string) => void
+  onChange?: (id: string) => void
+  value: string
 }
 
-export const Items: React.FC<Props> = ({ items, onSelect }) => {
+export const Items: React.FC<Props> = ({ items, onChange, value }) => {
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
       const id = event.currentTarget.id
-      onSelect && onSelect(id)
+      onChange && onChange(id)
     },
-    [onSelect]
+    [onChange]
   )
 
   return (
     <List divided relaxed>
       {items.map(item => (
-        <List.Item onClick={handleClick} as={Item} id={item.id} key={item.id}>
+        <List.Item
+          onClick={handleClick}
+          as={item.id === value ? ItemActive : Item}
+          id={item.id}
+          key={item.id}
+        >
           <List.Icon name="user" size="large" verticalAlign="middle" />
           <List.Content>
             <List.Header as="a">{item.title}</List.Header>

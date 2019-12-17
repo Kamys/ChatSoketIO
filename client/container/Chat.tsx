@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { Message as MessageInfo } from 'semantic-ui-react'
 import Chat from '../components/Chat/Chat'
 import { ChatItem } from '../components/Chat/type'
-import { useDidMount, useUser } from '../hooks'
+import { useDidMount } from '../hooks'
 import chat from '../chat'
 import Message from '../components/Chat/Message'
 import { formatChatDate } from '../components/Chat/utils'
-import { Message as MessageInfo } from 'semantic-ui-react'
 import useChat from '../hooks/useChat'
 import { ItemType } from '../store/messages/type'
+import { useSelectedUser, useUser } from '../hooks/user'
 
 type Props = {
   chatId: string
@@ -19,6 +20,7 @@ const ChatPersonal: React.FC<Props> = props => {
   const { messages, sendMessages } = useChat(chatId)
 
   const { account } = useUser()
+  const selectedUser = useSelectedUser()
 
   useDidMount(() => {
     chat.init()
@@ -85,9 +87,10 @@ const ChatPersonal: React.FC<Props> = props => {
 
   return (
     <Chat
+      title={selectedUser.name}
       items={chatItems}
-      onKeyDown={handleKeyDown}
       message={message}
+      onKeyDown={handleKeyDown}
       onChangeMessages={setMessage}
       onSend={handlerSend}
     />

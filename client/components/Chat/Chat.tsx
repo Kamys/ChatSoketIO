@@ -4,14 +4,6 @@ import styled from 'styled-components'
 import { ChatItem } from './type'
 import MessageList from './MessageList'
 
-type Props = {
-  items: ChatItem[]
-  message: string
-  onChangeMessages: (messages: string) => void
-  onSend: () => void
-  onKeyDown: (event: React.KeyboardEvent) => void
-}
-
 const ChatContainer = styled.div`
   display: grid;
   grid-template-areas:
@@ -46,13 +38,22 @@ const Controls = styled.div`
   grid-area: controls;
 `
 
+type Props = {
+  items: ChatItem[]
+  message: string
+  title: string
+  onChangeMessages: (messages: string) => void
+  onSend: () => void
+  onKeyDown: (event: React.KeyboardEvent) => void
+}
+
 const Chat: React.FC<Props> = props => {
-  const { items, message, onChangeMessages, onKeyDown, onSend } = props
+  const { items, message, title, onChangeMessages, onKeyDown, onSend } = props
 
   return (
     <ChatContainer>
       <Header as={Title} dividing>
-        Main chat
+        {title}
       </Header>
       <MessageList as={Content} chatItems={items} />
       <Input

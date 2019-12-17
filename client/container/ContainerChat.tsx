@@ -8,7 +8,7 @@ import ChatPersonal from './Chat'
 
 type Props = {}
 
-export const RightPanel: React.FC<Props> = () => {
+export const ContainerChat: React.FC<Props> = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const storeChats = useStore(Chat.storeChats)
   const storeAccount = useStore(User.storeAccount)
