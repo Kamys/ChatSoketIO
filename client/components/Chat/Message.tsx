@@ -16,7 +16,7 @@ type Props = ChatMessage & {
 const Message: React.FC<Props> = props => {
   const { userAvatar, name, dataCreated, text, isYour } = props
   return (
-    <Comment as={isYour && Content}>
+    <Comment as={isYour ? Content : 'div'}>
       <Comment.Avatar src={userAvatar} />
       <Comment.Content>
         <Comment.Author as="a">{name}</Comment.Author>
