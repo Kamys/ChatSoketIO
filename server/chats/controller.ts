@@ -2,15 +2,11 @@ import { UserRequest } from '../type'
 import Chat from './model'
 import utils from './utils'
 import Users from '../users'
-import mongoose from 'mongoose'
 import { IChat } from './type'
+import { isValidId } from 'server/utils/validation'
 
 type ChatCreateBody = {
   memberId: string
-}
-
-const isValidId = (id: string) => {
-  return mongoose.Types.ObjectId.isValid(id)
 }
 
 const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
