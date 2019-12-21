@@ -1,53 +1,55 @@
-import { UserRequest } from '../type'
+import { isValidId } from 'server/utils/validation'
+import { DomainError } from 'server/domainError'
+import { IViewMessages } from 'server/messge/type'
+import { IUserJWTPayload } from 'server/users/type'
+import { IChat } from 'server/chats/type'
 import Message from './model'
 import Chat from '../chats'
 import utils from './utils'
-import { isValidId } from 'server/utils/validation'
 
-type GetMessagesQuery = {
-  chatId: string
+const isChatMember = (chat: IChat, userId: string): boolean => {
+  return chat.memberIds.includes(userId)
 }
 
-const getMessages = async (req: UserRequest<void, GetMessagesQuery>, res) => {
-  const { user } = req
-  const { chatId } = req.query
+const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IViewMessages[]> => {
   if (!isValidId(chatId)) {
-    res.status(400).send(`Not correct id: ${chatId}`)
-    return
+    throw DomainError.invalidObjectId({ argumentName: 'chatId' })
   }
   const chat = await Chat.findById(chatId)
   if (!chat) {
-    res.status(400).send(`Chat not found id: ${chatId}`)
-    return
+    throw DomainError.notFoundEntity({
+      entityName: 'Chat',
+      searchParams: { chatId },
+    })
   }
-  if (!chat.memberIds.includes(user.id)) {
-    res.status(403).send(`You not chat member: ${chatId}`)
-    return
+  if (!isChatMember(chat, user.id)) {
+    throw DomainError.forbidden({
+      whoTried: user.name,
+      protectedEntityName: 'Chat',
+      reason: 'You not chat member',
+    })
   }
   const messages = await Message.findByChatId(chat._id)
-  res.status(200).send(messages)
+  return messages.map(utils.toView)
 }
 
-type CreateMessagesBody = {
-  chatId: string
-  text: string
-}
-
-const createMessages = async (req: UserRequest<CreateMessagesBody>, res) => {
-  const { user } = req
-  const { chatId, text } = req.body
+const createMessages = async (user: IUserJWTPayload, chatId: string, text: string): Promise<IViewMessages> => {
   const chat = await Chat.findById(chatId)
   if (!isValidId(chatId)) {
-    res.status(400).send(`Not correct id: ${chatId}`)
-    return
+    throw DomainError.invalidObjectId({ argumentName: 'chatId' })
   }
   if (!chat) {
-    res.status(400).send(`Chat not found id: ${chatId}`)
-    return
+    throw DomainError.notFoundEntity({
+      entityName: 'Chat',
+      searchParams: { chatId },
+    })
   }
-  if (!chat.memberIds.includes(user.id)) {
-    res.status(403).send(`You not chat member: ${chatId}`)
-    return
+  if (!isChatMember(chat, user.id)) {
+    throw DomainError.forbidden({
+      whoTried: user.name,
+      protectedEntityName: 'Chat',
+      reason: 'You not chat member',
+    })
   }
   const message = await Message.createModel({
     chatId: chat._id,
@@ -56,7 +58,7 @@ const createMessages = async (req: UserRequest<CreateMessagesBody>, res) => {
     createDate: new Date().toString(),
   })
   await message.save()
-  res.status(200).send(utils.toView(message))
+  return utils.toView(message)
 }
 
 export { getMessages, createMessages }
