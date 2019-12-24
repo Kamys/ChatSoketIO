@@ -11,7 +11,7 @@ export class DomainError extends Error {
   errorInfo: Object
 
   constructor(type: DomainErrorType, errorInfo: object) {
-    super(`${type}. ${JSON.stringify(errorInfo, null, 4)}`)
+    super(`${type}. ${JSON.stringify(errorInfo)}`)
     this.errorInfo = errorInfo
     this.domainErrorType = type
 

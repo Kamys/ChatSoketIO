@@ -9,6 +9,7 @@ import { formatChatDate } from '../components/Chat/utils'
 import useChat from '../hooks/useChat'
 import { ItemType } from '../store/messages/type'
 import { useSelectedUser, useUser } from '../hooks/user'
+import MessageStore from 'client/store/messages'
 
 type Props = {
   chatId: string
@@ -24,6 +25,7 @@ const ChatPersonal: React.FC<Props> = props => {
 
   useDidMount(() => {
     chat.init()
+    MessageStore.getAllMessages({ chatId })
   })
 
   const handlerSend = useCallback(() => {
@@ -47,14 +49,14 @@ const ChatPersonal: React.FC<Props> = props => {
       if (message.type === ItemType.Message) {
         return {
           id: message.id,
-          dataCreated: message.dateCreated,
+          dataCreated: message.createDate,
           reactNode: (
             <Message
               id={message.id}
-              isYour={message.userName === account.name}
-              dataCreated={formatChatDate(message.dateCreated)}
+              isYour={message.creatorName === account.name}
+              dataCreated={formatChatDate(message.createDate)}
               text={message.text}
-              name={message.userName}
+              name={message.creatorName}
               userAvatar={message.userAvatar}
             />
           ),
@@ -64,7 +66,7 @@ const ChatPersonal: React.FC<Props> = props => {
       if (message.type === ItemType.Notification) {
         return {
           id: message.id,
-          dataCreated: message.dateCreated,
+          dataCreated: message.createDate,
           reactNode: <MessageInfo positive>{message.text}</MessageInfo>,
         }
       }

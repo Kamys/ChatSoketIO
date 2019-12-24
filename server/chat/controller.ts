@@ -3,7 +3,7 @@ import Chat from './model'
 import utils from './utils'
 import Users from '../users'
 import { IChat } from './type'
-import { isValidId } from 'server/utils/validation'
+import { isValidId } from '../utils/validation'
 
 type ChatCreateBody = {
   memberId: string

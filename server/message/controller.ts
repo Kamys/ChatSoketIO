@@ -1,17 +1,17 @@
-import { isValidId } from 'server/utils/validation'
+import { isValidId } from '../utils/validation'
 import { DomainError } from 'server/domainError'
-import { IViewMessages } from 'server/messge/type'
+import { IViewMessage } from 'server/message/type'
 import { IUserJWTPayload } from 'server/users/type'
-import { IChat } from 'server/chats/type'
+import { IChat } from 'server/chat/type'
 import Message from './model'
-import Chat from '../chats'
+import Chat from '../chat'
 import utils from './utils'
 
 const isChatMember = (chat: IChat, userId: string): boolean => {
   return chat.memberIds.includes(userId)
 }
 
-const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IViewMessages[]> => {
+const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IViewMessage[]> => {
   if (!isValidId(chatId)) {
     throw DomainError.invalidObjectId({ argumentName: 'chatId' })
   }
@@ -33,7 +33,7 @@ const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IView
   return messages.map(utils.toView)
 }
 
-const createMessages = async (user: IUserJWTPayload, chatId: string, text: string): Promise<IViewMessages> => {
+const createMessages = async (user: IUserJWTPayload, chatId: string, text: string): Promise<IViewMessage> => {
   const chat = await Chat.findById(chatId)
   if (!isValidId(chatId)) {
     throw DomainError.invalidObjectId({ argumentName: 'chatId' })
@@ -54,6 +54,7 @@ const createMessages = async (user: IUserJWTPayload, chatId: string, text: strin
   const message = await Message.createModel({
     chatId: chat._id,
     creatorId: user.id,
+    creatorName: user.name,
     text,
     createDate: new Date().toString(),
   })
@@ -61,4 +62,4 @@ const createMessages = async (user: IUserJWTPayload, chatId: string, text: strin
   return utils.toView(message)
 }
 
-export { getMessages, createMessages }
+export default { getMessages, createMessages }

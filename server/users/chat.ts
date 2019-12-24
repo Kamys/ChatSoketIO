@@ -4,8 +4,9 @@ import socketAuth from 'socketio-auth'
 import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
 import { IUserJWTPayload } from './type'
-import Chats from '../chats'
-import { IChat } from '../chats/type'
+import Chats from '../chat'
+import { IChat } from '../chat/type'
+import Message from '../message'
 
 interface ISocketChat extends Socket {
   user: IUserJWTPayload
@@ -23,22 +24,15 @@ const run = (http: Server) => {
 
   const postAuthenticate = async (socket: ISocketChat) => {
     socket.on('sendMessage', async message => {
-      const { name } = socket.user
       const chat: IChat = await Chats.findById(message.chatId)
       if (!chat) {
         return
       }
+      const newMessages = await Message.controller.createMessages(socket.user, chat.id, message.msg)
       chat.memberIds.forEach(memberId => {
         const toSocket = getSocketById(memberId)
         if (!toSocket) {
           return
-        }
-        const newMessages = {
-          id: new Date().valueOf(),
-          dateCreated: new Date().toString(),
-          userName: name,
-          text: message.msg,
-          chatId: message.chatId,
         }
         toSocket.emit('sendMessage', newMessages)
       })

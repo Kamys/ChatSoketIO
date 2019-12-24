@@ -8,7 +8,7 @@ import { Item, Items } from '../components/Items/Items'
 import { useDidMount } from '../hooks'
 import user from '../store/user'
 import { useSelectedUser } from 'client/hooks/user'
-import { IUser } from '@client/store/user/user'
+import { IUser } from 'client/store/user/user'
 
 const Title = styled.h3`
   &&& {

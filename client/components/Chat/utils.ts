@@ -6,5 +6,5 @@ export const formatChatDate = (dateText: string) => {
     console.error('Date is not valid:', date)
     return '---'
   }
-  return format(date, 'k:m')
+  return format(date, 'kk:mm')
 }

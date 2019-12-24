@@ -5,12 +5,14 @@ export interface IMessage extends Document {
   chatId: string
   text: string
   createDate: string
+  creatorName: string
 }
 
-export interface IViewMessages {
+export interface IViewMessage {
   id: string
   creatorId: string
   chatId: string
   text: string
   createDate: string
+  creatorName: string
 }

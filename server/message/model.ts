@@ -2,12 +2,11 @@ import mongoose, { Schema } from 'mongoose'
 import { IMessage } from './type'
 
 const ChatSchema = new Schema({
-  name: {
-    creatorId: Schema.Types.ObjectId,
-    chatId: Schema.Types.ObjectId,
-    text: String,
-    createDate: Schema.Types.Date,
-  },
+  creatorId: Schema.Types.ObjectId,
+  creatorName: Schema.Types.String,
+  chatId: Schema.Types.ObjectId,
+  text: String,
+  createDate: Schema.Types.Date,
   memberIds: [Schema.Types.ObjectId],
 })
 
@@ -18,6 +17,7 @@ type createModelProps = {
   creatorId: string
   text: string
   createDate: string
+  creatorName: string
 }
 
 const createModel = (props: createModelProps) => {

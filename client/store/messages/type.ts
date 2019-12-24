@@ -7,14 +7,15 @@ export type ChatItem = {
   id: string
   type: ItemType
   chatId: string
-  dateCreated: string
+  createDate: string
 }
 
 export type ChatMessage = ChatItem & {
+  creatorId: string
+  chatId: string
   text: string
+  creatorName: string
   userAvatar: string
-  userName: string
-  type: ItemType.Message
 }
 
 export type ChatInfo = ChatItem & {

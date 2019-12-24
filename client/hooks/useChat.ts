@@ -4,28 +4,21 @@ import Message from '../store/messages'
 import { useStore } from 'effector-react'
 import { IDictionary } from '../type'
 import { ChatElement, ItemType } from '../store/messages/type'
+import { IViewMessage } from 'server/message/type'
+import { messageToChatItem } from 'client/store/messages/utils'
 
 const useChat = (chatId: string) => {
   const storeMessage: IDictionary<Array<ChatElement>> = useStore(Message.store)
 
   useEffect(() => {
-    chat.handleSendMessage((messages) => {
-      Message.receiveMessage({
-        id: new Date().valueOf().toString(),
-        text: messages.text,
-        dateCreated: new Date().toString(),
-        userAvatar:
-          'https://react.semantic-ui.com/images/avatar/small/matt.jpg',
-        userName: messages.userName,
-        type: ItemType.Message,
-        chatId: messages.chatId,
-      })
+    chat.handleSendMessage((messages: IViewMessage) => {
+      Message.receiveMessage(messageToChatItem(messages))
     })
 
     chat.handleSendInfo(msg => {
       Message.receiveMessage({
         id: new Date().valueOf().toString(),
-        dateCreated: new Date().toString(),
+        createDate: new Date().toString(),
         text: msg,
         isPositive: true,
         type: ItemType.Notification,

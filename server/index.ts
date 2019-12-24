@@ -4,7 +4,8 @@ import { createServer } from 'http'
 import path from 'path'
 import mongoose from 'mongoose'
 import User from './users'
-import Chat from './chats'
+import Chat from './chat'
+import Message from './message'
 import checkEnvironment from './utils/checkEnvironment'
 
 const app = express()
@@ -31,9 +32,19 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use('/api/users', User.router)
 app.use('/api/chats', Chat.router)
+app.use('/api/messages', Message.router)
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../dist/index.html'))
+})
+
+app.use((error, req, res, next) => {
+  console.log('Not handle error: ', error)
+  res.status(500).send({
+    messages: 'Not handle error ¯\\_(ツ)_/¯',
+    error: error.domainErrorType,
+    ...error.errorInfo,
+  })
 })
 
 http.listen(3000, () => {
