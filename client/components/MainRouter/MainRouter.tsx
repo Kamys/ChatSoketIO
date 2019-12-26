@@ -21,7 +21,7 @@ const MainRouter: React.FC<Props> = () => {
   const { isLoading, isLogin } = useUser()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading user...</div>
   }
 
   return (

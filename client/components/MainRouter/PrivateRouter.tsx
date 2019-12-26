@@ -11,6 +11,11 @@ const PrivateRouter: React.FC<Props> = () => {
       <Route exact path={ROUT_URL.Home}>
         <MainPage />
       </Route>
+      <Route exact path={ROUT_URL.Setting}>
+        <MainPage>
+          Setting page
+        </MainPage>
+      </Route>
       <Route exact path={ROUT_URL.Chat}>
         <MainPage>
           <ContainerChat />

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import ListUser from '../../container/ListUser'
+import Menu from '../../container/ListUser'
 
 type Props = {}
 
@@ -27,7 +27,7 @@ export const MainPage: React.FC<Props> = ({ children }) => {
   return (
     <Container>
       <LeftPanel>
-        <ListUser />
+        <Menu />
       </LeftPanel>
       <MainContent>{children}</MainContent>
     </Container>
