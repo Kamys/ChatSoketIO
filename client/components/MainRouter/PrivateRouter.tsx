@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { ROUT_URL } from './constants'
 import { MainPage } from '../MainPage/MainPage'
 import { ContainerChat } from '../../container/ContainerChat'
+import SettingPage from '../SettingPage'
 type Props = {}
 
 const PrivateRouter: React.FC<Props> = () => {
@@ -13,7 +14,7 @@ const PrivateRouter: React.FC<Props> = () => {
       </Route>
       <Route exact path={ROUT_URL.Setting}>
         <MainPage>
-          Setting page
+          <SettingPage />
         </MainPage>
       </Route>
       <Route exact path={ROUT_URL.Chat}>

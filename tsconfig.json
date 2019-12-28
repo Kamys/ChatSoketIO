@@ -4,7 +4,8 @@
       "node"
     ],
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "client/type"
     ],
     "module": "commonjs",
     "target": "es2019",
