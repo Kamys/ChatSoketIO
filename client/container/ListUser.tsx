@@ -10,6 +10,7 @@ import user from '../store/user'
 import { useSelectedUser } from 'client/hooks/user'
 import { IUser } from 'client/store/user/user'
 import { ROUT_URL } from 'client/components/MainRouter/constants'
+import { getFileUrl } from 'client/utils'
 
 const Title = styled.h3`
   &&& {
@@ -44,6 +45,7 @@ const ListUser: React.FC<Props> = () => {
     return listUser.map(user => ({
       id: user.id,
       title: user.name,
+      imageSrc: getFileUrl(user.avatar),
       text: '',
     }))
   }, [listUser])

@@ -1,13 +1,23 @@
 import React, { useCallback } from 'react'
 import { List } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { Avatar } from '../Avatar'
 
 const Item = styled.div`
   &&&& {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     padding: 10px;
     :hover {
       background-color: rgba(0, 255, 255, 0.03);
     }
+  }
+`
+
+const Name = styled.a`
+  &&&& {
+    margin-left: 10px;
   }
 `
 
@@ -51,11 +61,8 @@ export const Items: React.FC<Props> = ({ items, onChange, value }) => {
           id={item.id}
           key={item.id}
         >
-          <List.Icon name="user" size="large" verticalAlign="middle" />
-          <List.Content>
-            <List.Header as="a">{item.title}</List.Header>
-            <List.Description as="a">{item.text}</List.Description>
-          </List.Content>
+          <Avatar imageSrc={item.imageSrc} />
+          <List.Header as={Name}>{item.title}</List.Header>
         </List.Item>
       ))}
     </List>

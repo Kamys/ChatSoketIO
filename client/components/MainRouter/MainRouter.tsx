@@ -6,7 +6,7 @@ import { ROUT_URL } from './constants'
 import Auth from '../Auth'
 import { Private } from './Private'
 import PrivateRouter from './PrivateRouter'
-import { useUser } from 'client/hooks/user'
+import { useAccount } from 'client/hooks/user'
 
 const Center = styled.div`
   height: 100vh;
@@ -18,7 +18,7 @@ const Center = styled.div`
 type Props = {}
 
 const MainRouter: React.FC<Props> = () => {
-  const { isLoading, isLogin } = useUser()
+  const { isLoading, isLogin } = useAccount()
 
   if (isLoading) {
     return <div>Loading user...</div>

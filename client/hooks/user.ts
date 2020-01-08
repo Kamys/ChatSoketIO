@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect, useState, useCallback } from 'react'
 import { useStore } from 'effector-react'
 import isNil from 'lodash/isNil'
 import { useParams } from 'react-router-dom'
@@ -12,7 +12,7 @@ type UseUserResult = {
   account: IUser
 }
 
-export const useUser = (): UseUserResult => {
+export const useAccount = (): UseUserResult => {
   const account = useStore(user.storeAccount)
   const [isLoading, setIsLoading] = useState(true)
   const isLogin = !isNil(account) && hasToken()
@@ -41,4 +41,17 @@ export const useSelectedUser = (): IUser | null => {
   return useMemo(() => {
     return listUser.find(item => item.id === chatId)
   }, [chatId, listUser])
+}
+
+export const useGetAvatar = () => {
+  const listUser = useStore(user.storeList)
+  const { account } = useAccount()
+  
+  return useCallback((userId: string) => {
+    if (account.id === userId) {
+      return account.avatar
+    }
+    const user = listUser.find(user => user.id === userId)
+    return user && user.avatar
+  }, [account.avatar, account.id, listUser])
 }

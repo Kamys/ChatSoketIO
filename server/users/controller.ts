@@ -3,6 +3,7 @@ import { IUser } from './type'
 import User from './model'
 import utils from './utils'
 import { SERVER_ERROR } from '../constants/error'
+import { HTTP_STATUS } from 'server/domainError/types'
 
 const create = async (req: UnAuthRequest<IUser>, res) => {
   const { body } = req
@@ -34,6 +35,10 @@ const create = async (req: UnAuthRequest<IUser>, res) => {
 
 const getCurrent = async (req: RequestUser, res) => {
   const user = await User.getById(req.user.id)
+  if (!user) {
+    res.status(HTTP_STATUS.FORBIDDEN).send()
+    return
+  }
   res.send(utils.toView(user))
 }
 

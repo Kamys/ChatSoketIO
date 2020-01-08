@@ -2,11 +2,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button, Image } from 'semantic-ui-react'
 import DefaultImage from './defaultImage.jpg'
-import { useInputFile } from 'client/utils'
+import { getFileUrl } from 'client/utils'
 import User from 'client/store/user'
 import { useEffect, useMemo } from 'react'
-import { baseURL } from 'client/api'
-import { useUser } from 'client/hooks/user'
+import { useAccount } from 'client/hooks/user'
+import { useInputFile } from 'client/hooks'
 
 type Props = {}
 
@@ -23,7 +23,7 @@ export const ALLOWED_EXTENSION = ['image/jpeg', 'image/png']
 
 const SettingPage: React.FC<Props> = () => {
 
-  const { account } = useUser()
+  const { account } = useAccount()
   const { inputFileRef, handleOpenInputFile, file, base64 } = useInputFile()
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const SettingPage: React.FC<Props> = () => {
       return base64
     }
     if (account.avatar) {
-      return `${baseURL}api/file/?fileName=${account.avatar}`
+      return getFileUrl(account.avatar)
     }
 
     return DefaultImage

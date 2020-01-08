@@ -15,7 +15,7 @@ export type ChatMessage = ChatItem & {
   chatId: string
   text: string
   creatorName: string
-  userAvatar: string
+  userAvatar?: string
 }
 
 export type ChatInfo = ChatItem & {

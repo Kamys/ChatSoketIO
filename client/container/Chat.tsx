@@ -8,9 +8,9 @@ import Message from '../components/Chat/Message'
 import { formatChatDate } from '../components/Chat/utils'
 import useChat from '../hooks/useChat'
 import { ItemType } from '../store/messages/type'
-import { useSelectedUser, useUser } from '../hooks/user'
+import { useSelectedUser, useAccount, useGetAvatar } from '../hooks/user'
 import MessageStore from 'client/store/messages'
-
+import { getFileUrl } from 'client/utils'
 type Props = {
   chatId: string
 }
@@ -19,9 +19,9 @@ const ChatPersonal: React.FC<Props> = props => {
   const { chatId } = props
   const [message, setMessage] = useState<string>('')
   const { messages, sendMessages } = useChat(chatId)
-
-  const { account } = useUser()
+  const { account } = useAccount()
   const selectedUser = useSelectedUser()
+  const getAvatar = useGetAvatar()
 
   useDidMount(() => {
     chat.init()
@@ -47,6 +47,7 @@ const ChatPersonal: React.FC<Props> = props => {
   const chatItems = useMemo<ChatItem[]>(() => {
     const messageNodes = messages.map(message => {
       if (message.type === ItemType.Message) {
+        const avatar = getAvatar(message.creatorId)
         return {
           id: message.id,
           dataCreated: message.createDate,
@@ -57,7 +58,7 @@ const ChatPersonal: React.FC<Props> = props => {
               dataCreated={formatChatDate(message.createDate)}
               text={message.text}
               name={message.creatorName}
-              userAvatar={message.userAvatar}
+              userAvatar={getFileUrl(avatar)}
             />
           ),
         }

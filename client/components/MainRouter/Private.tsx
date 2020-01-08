@@ -2,7 +2,7 @@ import React from 'react'
 import { ROUT_URL } from './constants'
 import RedirectConditional from './RedirectConditional'
 import { Route } from 'react-router'
-import { useUser } from 'client/hooks/user'
+import { useAccount } from 'client/hooks/user'
 
 type Props = {
   path: ROUT_URL
@@ -10,7 +10,7 @@ type Props = {
 
 export const Private: React.FC<Props> = props => {
   const { path, children } = props
-  const { isLogin } = useUser()
+  const { isLogin } = useAccount()
 
   return (
     <Route path={path}>
