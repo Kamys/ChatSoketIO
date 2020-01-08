@@ -15,6 +15,7 @@ const UserSchema = new Schema({
     minlength: 3,
     maxlength: 255,
   },
+  avatar: String,
 })
 
 const Model = mongoose.model<IUser>('User', UserSchema)

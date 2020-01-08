@@ -8,16 +8,18 @@ export interface IUserLoginForm {
 }
 
 export interface ILoginResponse {
-  user: {
-    id: string
-    name: string
-  }
+  user: IUser
   token: string
 }
 
 export interface IUser {
   id: string
   name: string
+  avatar: string
+}
+
+type SaveAvatarRequest = {
+  avatar: File
 }
 
 const createUser = createEffect<IUserLoginForm, ILoginResponse, void>(
@@ -49,6 +51,16 @@ const fetchAccount = createEffect<void, IUser, void>('fetchAccount', {
   },
 })
 
+const saveAvatar = createEffect<SaveAvatarRequest, void, void>('saveAvatar', {
+  handler: ({ avatar }) => {
+    const formData = new FormData()
+    formData.append('avatar', avatar)
+    return axiosInstance
+      .post('users/avatar', formData)
+      .then(response => response.data)
+  },
+})
+
 login.done.watch(({ result }) => {
   initToken(result.token)
 })
@@ -73,4 +85,5 @@ export default {
   logout,
   createUser,
   fetchAccount,
+  saveAvatar,
 }

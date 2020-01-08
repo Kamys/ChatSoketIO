@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import { Button, Image } from 'semantic-ui-react'
 import DefaultImage from './defaultImage.jpg'
 import { useInputFile } from 'client/utils'
+import User from 'client/store/user'
+import { useEffect, useMemo } from 'react'
+import { baseURL } from 'client/api'
+import { useUser } from 'client/hooks/user'
 
 type Props = {}
 
@@ -17,18 +21,34 @@ const HiddenInput = styled.input`
 
 export const ALLOWED_EXTENSION = ['image/jpeg', 'image/png']
 
-
-
 const SettingPage: React.FC<Props> = () => {
 
-  const { inputFile, handleOpenInputFile, file } = useInputFile(DefaultImage)
+  const { account } = useUser()
+  const { inputFileRef, handleOpenInputFile, file, base64 } = useInputFile()
 
+  useEffect(() => {
+    if (file) {
+      User.saveAvatar({ avatar: file })
+    }
+  }, [file])
+
+  const imageSrc = useMemo(() => {
+    if (base64) {
+      return base64
+    }
+    if (account.avatar) {
+      return `${baseURL}api/file/?fileName=${account.avatar}`
+    }
+
+    return DefaultImage
+  }, [account.avatar, base64])
+  
   return (
     <div>
-      <Image src={file} size='small' />
+      <Image src={imageSrc} size='small' />
       <Button onClick={handleOpenInputFile}>Select image</Button>
       <HiddenInput
-        ref={inputFile}
+        ref={inputFileRef}
         type="file"
         accept={ALLOWED_EXTENSION.join(',')}
       />

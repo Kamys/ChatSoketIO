@@ -18,6 +18,7 @@
     "effector": "20.7.1",
     "effector-react": "20.4.2",
     "express": "4.17.1",
+    "express-fileupload": "^1.1.6",
     "http": "0.0.0",
     "joi": "14.3.1",
     "jsonwebtoken": "8.5.1",
@@ -31,7 +32,8 @@
     "semantic-ui-react": "0.88.1",
     "socket.io": "2.3.0",
     "socketio-auth": "0.1.1",
-    "styled-components": "4.4.1"
+    "styled-components": "4.4.1",
+    "uniqid": "^5.2.0"
   },
   "devDependencies": {
     "@types/express": "4.17.2",

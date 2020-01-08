@@ -44,6 +44,7 @@ const toView = (user: Omit<IUser, 'password'>): IViewUser => {
   return {
     id: user._id,
     name: user.name,
+    avatar: user.avatar
   }
 }
 

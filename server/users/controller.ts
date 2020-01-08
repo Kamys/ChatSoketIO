@@ -71,4 +71,10 @@ const getAllContacts = async (req: RequestUser, res) => {
   res.send(allUser.map(utils.toView))
 }
 
-export { create, getCurrent, login, getAllContacts }
+const setAvatar = async (userId: string, fileName: string) => {
+  const user = await User.getById(userId)
+  user.avatar = fileName
+  await user.save()
+}
+
+export { create, getCurrent, login, getAllContacts, setAvatar }

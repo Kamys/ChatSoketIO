@@ -8,34 +8,44 @@ export const createObjectURL = (file?: File | null): string | null => {
   return null
 }
 
-export const useInputFile = (defaultImage: string) => {
-  const [file, setFile] = useState<string>(defaultImage)
-  const inputFile = useRef<HTMLInputElement>()
+export const useInputFile = () => {
+  const [file, setFile] = useState<File>()
+  const [base64, setBase64] = useState<string>()
+  const inputFileRef = useRef<HTMLInputElement>()
 
   const handleOpenInputFile = useCallback(() => {
-    if (inputFile.current) {
-      inputFile.current.click()
+    if (inputFileRef.current) {
+      inputFileRef.current.click()
     }
   }, [])
+  
+  useEffect(() => {
+    if (!file) {
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setBase64(reader.result as string)
+    reader.readAsDataURL(file)
+  }, [file])
 
   const handleAddFile = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newFile = event.target.files[0]
 
       if (newFile) {
-        setFile(createObjectURL(newFile))
+        setFile(newFile)
       }
     },
     []
   )
 
   useEffect(() => {
-    if (!inputFile.current) {
+    if (!inputFileRef.current) {
       return
     }
-    inputFile.current.onchange = handleAddFile as any
-    inputFile.current.multiple = false
+    inputFileRef.current.onchange = handleAddFile as any
+    inputFileRef.current.multiple = false
   }, [handleAddFile])
 
-  return { inputFile, handleOpenInputFile, file }
+  return { inputFileRef, handleOpenInputFile, file, base64 }
 }
