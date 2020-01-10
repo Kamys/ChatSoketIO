@@ -29,6 +29,7 @@ export class DomainError extends Error {
 
   static invalidArgs = (errorInfo: InvalidArgsErrorProps) => {
     return new DomainError(DomainErrorType.InvalidArgs, errorInfo)
+      .setHttpStatus(HTTP_STATUS.BAD_REQUEST)
   }
 
   static notFound = (errorInfo: NotFoundProps) => {
@@ -46,6 +47,7 @@ export class DomainError extends Error {
       argumentName: errorInfo.argumentName,
       validationMessages: 'This an invalid ObjectId',
     })
+      .setHttpStatus(HTTP_STATUS.BAD_REQUEST)
   }
 
   static notFoundEntity = (errorInfo: NotFoundEntityProps) => {
