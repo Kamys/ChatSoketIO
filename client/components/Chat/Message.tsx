@@ -11,12 +11,6 @@ const CommentDiv = styled.div`
   }
 `
 
-/*const Selected = styled(CommentDiv)`
-  &&& {
-    background-color: rgba(0,0,0,.05);
-  }
-`*/
-
 const Content = styled.div`
   &&& {
     margin-left: 10px;
