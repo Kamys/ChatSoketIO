@@ -1,5 +1,5 @@
 import express from 'express'
-import { RequestQuery } from 'server/type'
+import { RequestUser } from 'server/type'
 import Utils from 'server/file/utils'
 import { DomainError } from 'server/domainError'
 import { HTTP_STATUS } from 'server/domainError/types'
@@ -10,7 +10,7 @@ type GetFileQuery = {
   fileName: string
 }
 
-const handlerGetFile = async (req: RequestQuery<GetFileQuery>, res, next) => {
+const handlerGetFile = async (req: RequestUser<void, GetFileQuery>, res, next) => {
   const { fileName } = req.query
   const errorHandle = error => {
     if (error && error.status == HTTP_STATUS.NOT_FOUND) {

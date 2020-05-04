@@ -10,6 +10,7 @@ import User from './users'
 import Chat from './chat'
 import Message from './message'
 import File from './file'
+import { ValidationError } from 'express-validation'
 
 
 const app = express()
@@ -43,9 +44,12 @@ app.use('/api/file', File.router)
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
   console.log('Not handle error: ', error)
+  if (error instanceof ValidationError) {
+    return res.status(error.statusCode).json(error)
+  }
   if (error instanceof DomainError) {
-    res.status(error.httpStatus).send({
-      messages: 'Not handle domain error ¯\\_(ツ)_/¯',
+    return res.status(error.httpStatus).send({
+      messages: 'Not handle domain error',
       error: error.domainErrorType,
       ...error.errorInfo,
     })

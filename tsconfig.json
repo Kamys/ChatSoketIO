@@ -5,7 +5,7 @@
     ],
     "typeRoots": [
       "node_modules/@types",
-      "client/type"
+      "./types"
     ],
     "module": "commonjs",
     "target": "es2019",
@@ -39,7 +39,7 @@
   "include": [
     "server",
     "client",
-    "type"
+    "types"
   ],
   "exclude": [
     "node_modules",

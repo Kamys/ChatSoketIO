@@ -1,12 +1,12 @@
 import express from 'express'
 import auth from '../middleware/auth'
 import { create, getCurrent, login, getAllContacts, setAvatar } from './controller'
-import { UserRequest } from 'server/type'
+import { RequestFiles } from 'server/type'
 import ControllerFile from 'server/file/controller'
 
 const router = express.Router()
 
-const handleSetAvatar = async (req: UserRequest, res, next) => {
+const handleSetAvatar = async (req: RequestFiles, res, next) => {
   try {
     const { user } = req
     const fileName = await ControllerFile.saveFile(req.files.avatar)

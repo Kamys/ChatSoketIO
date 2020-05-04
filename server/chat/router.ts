@@ -1,12 +1,24 @@
-import express from 'express'
+import express, { Router } from 'express'
 import auth from '../middleware/auth'
-import { createPersonal, getChat, myChats } from './controller'
+import { validate } from 'express-validation'
+import {
+  createPersonal,
+  getChat,
+  myChats,
+  createPersonalValidation,
+  getChatValidation,
+} from './controller'
 
-const router = express.Router()
+const router: Router = express.Router()
 
-router.post('/createPersonal', auth, createPersonal)
+router.post(
+  '/createPersonal',
+  auth,
+  validate(createPersonalValidation),
+  createPersonal
+)
 
-router.get('/getChat', auth, getChat)
+router.get('/getChat', auth, validate(getChatValidation), getChat)
 
 router.get('/current', auth, myChats)
 

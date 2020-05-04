@@ -42,7 +42,12 @@ const getCurrent = async (req: RequestUser, res) => {
   res.send(utils.toView(user))
 }
 
-const login = async (req: RequestUser, res) => {
+type UserLoginBody = {
+  name: string
+  password: string
+}
+
+const login = async (req: RequestUser<UserLoginBody>, res) => {
   const { body } = req
   const { error } = utils.validateUser(body)
   if (error) {

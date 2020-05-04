@@ -1,25 +1,22 @@
-import { UserRequest } from '../type'
+import { HUR } from 'server/type'
 import Chat from './model'
 import utils from './utils'
 import Users from '../users'
 import { IChat } from './type'
-import { isValidId } from '../utils/validation'
+import RequestValidation from 'server/utils/RequestValidation'
 
 type ChatCreateBody = {
   memberId: string
 }
 
-const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
+const createPersonalValidation = {
+  body: RequestValidation.object({
+    memberId: RequestValidation.id().required(),
+  })
+}
+
+const createPersonal: HUR<ChatCreateBody> = async (req, res) => {
   const { body, user } = req
-  //TODO: Extract validation in middleware
-  if (!body.memberId) {
-    res.status(400).send('memberId is required field')
-    return
-  }
-  if (!isValidId(body.memberId)) {
-    res.status(400).send(`Not correct id: ${body.memberId}`)
-    return
-  }
   const member = await Users.getById(body.memberId)
   if (!member) {
     res.status(400).send(`Member with id ${body.memberId} not found`)
@@ -30,17 +27,14 @@ const createPersonal = async (req: UserRequest<ChatCreateBody>, res) => {
   res.status(200).send(chatSaved)
 }
 
-const getChat = async (req: UserRequest<void, ChatCreateBody>, res) => {
+const getChatValidation = {
+  query: RequestValidation.object({
+    memberId: RequestValidation.id().required(),
+  })
+}
+
+const getChat: HUR<void, ChatCreateBody> = async (req, res) => {
   const { user, query } = req
-  //TODO: Extract validation in middleware
-  if (!query.memberId) {
-    res.status(400).send('memberId is required field')
-    return
-  }
-  if (!isValidId(query.memberId)) {
-    res.status(400).send(`Not correct id: ${query.memberId}`)
-    return
-  }
   const member = await Users.getById(query.memberId)
   if (!member) {
     res.status(400).send(`Member with id ${query.memberId} not found`)
@@ -56,9 +50,9 @@ const getChat = async (req: UserRequest<void, ChatCreateBody>, res) => {
   res.status(200).send(utils.toView(chatSaved))
 }
 
-const myChats = async (req: UserRequest, res) => {
+const myChats: HUR = async (req, res) => {
   const currentChat = await Chat.findByMember([req.user.id])
   res.status(200).send(currentChat)
 }
 
-export { createPersonal, myChats, getChat }
+export { createPersonal, myChats, getChat, createPersonalValidation, getChatValidation }

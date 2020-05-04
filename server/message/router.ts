@@ -1,7 +1,7 @@
 import express from 'express'
 import auth from '../middleware/auth'
 import Controller from './controller'
-import { UserRequest } from 'server/type'
+import { RequestUser } from 'server/type'
 
 const router = express.Router()
 
@@ -14,7 +14,7 @@ type CreateMessagesBody = {
   text: string
 }
 
-const handlerGetMessages = async (req: UserRequest<void, GetMessagesQuery>, res, next) => {
+const handlerGetMessages = async (req: RequestUser<void, GetMessagesQuery>, res, next) => {
   try {
     const { user } = req
     const { chatId } = req.query
@@ -26,7 +26,7 @@ const handlerGetMessages = async (req: UserRequest<void, GetMessagesQuery>, res,
   }
 }
 
-const handlerCreateMessages = async (req: UserRequest<CreateMessagesBody>, res, next) => {
+const handlerCreateMessages = async (req: RequestUser<CreateMessagesBody>, res, next) => {
   try {
     const { user } = req
     const { chatId, text } = req.body
