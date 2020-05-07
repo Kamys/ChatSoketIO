@@ -22,7 +22,7 @@ export type RequestUser<
   P extends Params = ParamsDictionary,
   ResBody = {},
 > = Merge<Request<P, ResBody, Body>, {
-  user: IUserJWTPayload
+  user?: IUserJWTPayload
   query: Query
 }>
 

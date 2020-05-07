@@ -1,9 +1,8 @@
-import { RequestHandler } from 'express'
 import { SERVER_ERROR } from '../constants/error'
 import User from '../users'
-import { RequestUser } from '../type'
+import { HUR } from 'server/type'
 
-const auth: RequestHandler = (req: RequestUser, res, next) => {
+const auth: HUR = (req, res, next) => {
   const tokenString = req.headers.authorization as string
   if (!tokenString) {
     res.status(401).send('Access denied. No token provided.')
