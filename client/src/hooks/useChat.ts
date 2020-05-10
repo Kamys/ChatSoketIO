@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react'
 import chat from '../chat'
-import Message from '../store/messages'
+import Message from '~/store//messages'
 import { useStore } from 'effector-react'
 import { IDictionary } from '~/type'
-import { ChatElement, ItemType } from '~store/messages/type'
+import { ChatElement, ItemType } from '~/store/messages/type'
 import { IViewMessage } from 'server/src/message/type'
 import { messageToChatItem } from '~/store/messages/utils'
 

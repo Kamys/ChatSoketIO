@@ -8,14 +8,16 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "~/*": [ "./src/*" ],
-      "~store/*": [ "./src/store/*" ],
-      "~components/*": [ "./src/components/*" ]
+      "~/*": [ "./src/*" ]
     }
   },
   "references": [
     {
       "path": "../server"
     }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

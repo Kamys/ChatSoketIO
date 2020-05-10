@@ -32,8 +32,6 @@
     "parcel-bundler": "1.12.4"
   },
   "alias": {
-    "~": "./src",
-    "@store": "src/store/",
-    "@components": "src/components"
+    "~": "./src"
   }
 }

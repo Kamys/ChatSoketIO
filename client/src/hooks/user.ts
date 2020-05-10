@@ -2,8 +2,8 @@ import { useMemo, useEffect, useState, useCallback } from 'react'
 import { useStore } from 'effector-react'
 import isNil from 'lodash/isNil'
 import { useParams } from 'react-router-dom'
-import { IUser } from '../store/user/user'
-import user from '../store/user'
+import { IUser } from '~/store//user/user'
+import user from '~/store//user'
 import { hasToken } from '../api/utils'
 
 type UseUserResult = {

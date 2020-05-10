@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ChangeEvent, useCallback, useState } from 'react'
-import user from '../../store/user'
+import user from '~/store/user'
 import { Button, Card, Form, Header, Message, Popup } from 'semantic-ui-react'
 import styled from 'styled-components'
 

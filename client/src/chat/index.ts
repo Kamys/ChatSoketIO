@@ -1,6 +1,6 @@
 import socketIOClient from 'socket.io-client'
 import { getToken } from '../api/utils'
-import user from '../store/user'
+import user from '~/store//user'
 import { baseURL } from '../api'
 
 const socket = socketIOClient(baseURL, {
