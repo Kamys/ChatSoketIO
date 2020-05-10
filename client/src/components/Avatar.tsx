@@ -17,10 +17,9 @@ const AvatarImage = styled.img`
 `
 
 export const Avatar: React.FC<Props> = ({ imageSrc }) => {
-/*  if (!isEmpty(imageSrc)) {
+  if (!isEmpty(imageSrc)) {
     return <AvatarImage src={imageSrc} />
   }
 
-  return <AvatarImage src={AvatarDefault} />*/
-  return null
+  return <AvatarImage src={AvatarDefault} />
 }

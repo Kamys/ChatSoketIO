@@ -6,7 +6,7 @@ import { ROUT_URL } from './constants'
 import Auth from '../Auth'
 import { Private } from './Private'
 import PrivateRouter from './PrivateRouter'
-import { useAccount } from 'client/src/hooks/user'
+import { useAccount } from '~/hooks/user'
 
 const Center = styled.div`
   height: 100vh;

@@ -1,1 +1,1 @@
-export const FILES_DIR = './uploads'
+export const FILES_DIR = '../uploads'

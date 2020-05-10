@@ -2,7 +2,7 @@ import React from 'react'
 import { ROUT_URL } from './constants'
 import RedirectConditional from './RedirectConditional'
 import { Route } from 'react-router'
-import { useAccount } from 'client/src/hooks/user'
+import { useAccount } from '~/hooks/user'
 
 type Props = {
   path: ROUT_URL

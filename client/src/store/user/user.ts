@@ -1,6 +1,6 @@
 import { createEffect, createStore } from 'effector'
 import { axiosInstance, initToken } from '../../api'
-import { removeToken } from '../../api/utils'
+import { removeToken } from '~/api/utils'
 
 export interface IUserLoginForm {
   name: string
@@ -74,15 +74,9 @@ fetchAccount.fail.watch(() => {
 })
 
 const storeAccount = createStore<IUser>(null)
-  .on(login.done, (_, action) => {
-    console.log('login.done: ', action.result.user)
-    return action.result.user
-  })
+  .on(login.done, (_, action) => action.result.user)
   .on(createUser.done, (_, action) => action.result.user)
-  .on(fetchAccount.done, (_, action) => {
-    console.log('fetchAccount.done: ', action)
-    return action.result
-  })
+  .on(fetchAccount.done, (_, action) => action.result)
   .on(logout.done, () => null)
 
 export default {

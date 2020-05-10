@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Comment } from 'semantic-ui-react'
 import { ChatMessage } from './type'
 import styled from 'styled-components'
-import { Avatar } from 'client/src/components/Avatar'
+import { Avatar } from '~/components/Avatar'
 
 const CommentDiv = styled.div`
   &&& {
@@ -22,7 +22,7 @@ type Props = ChatMessage & {
 }
 
 const Message: React.FC<Props> = props => {
-  const { userAvatar, name, dataCreated, text, isYour } = props
+  const { userAvatar, name, dataCreated, text } = props
   return (
     <Comment as={CommentDiv}>
       <Avatar imageSrc={userAvatar} />

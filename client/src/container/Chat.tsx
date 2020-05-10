@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Message as MessageInfo } from 'semantic-ui-react'
 import Chat from '../components/Chat/Chat'
-import { ChatItem } from '../components/Chat/type'
-import { useDidMount } from '../hooks'
+import { ChatItem } from '~components/Chat/type'
+import { useDidMount } from '~/hooks'
 import chat from '../chat'
 import Message from '../components/Chat/Message'
-import { formatChatDate } from '../components/Chat/utils'
+import { formatChatDate } from '~components/Chat/utils'
 import useChat from '../hooks/useChat'
-import { ItemType } from '../store/messages/type'
-import { useSelectedUser, useAccount, useGetAvatar } from '../hooks/user'
-import MessageStore from 'client/src/store/messages'
-import { getFileUrl } from 'client/src/utils'
+import { ItemType } from '~store/messages/type'
+import { useSelectedUser, useAccount, useGetAvatar } from '~/hooks/user'
+import MessageStore from '~/store/messages'
+import { getFileUrl } from '~/utils'
 type Props = {
   chatId: string
 }
@@ -86,7 +86,7 @@ const ChatPersonal: React.FC<Props> = props => {
       const secondTime = new Date(second.dataCreated).valueOf()
       return firstTime - secondTime
     })
-  }, [account.name, messages])
+  }, [account.name, getAvatar, messages])
 
   return (
     <Chat

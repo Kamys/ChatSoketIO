@@ -4,13 +4,13 @@ import { Header, Icon } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 
-import { Item, Items } from '../components/Items/Items'
-import { useDidMount } from '../hooks'
+import { Item, Items } from '~components/Items/Items'
+import { useDidMount } from '~/hooks'
 import user from '../store/user'
-import { useSelectedUser } from 'client/src/hooks/user'
-import { IUser } from 'client/src/store/user/user'
-import { ROUT_URL } from 'client/src/components/MainRouter/constants'
-import { getFileUrl } from 'client/src/utils'
+import { useSelectedUser } from '~/hooks/user'
+import { IUser } from '~/store/user/user'
+import { ROUT_URL } from '~/components/MainRouter/constants'
+import { getFileUrl } from '~/utils'
 
 const Title = styled.h3`
   &&& {

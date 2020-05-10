@@ -1,4 +1,4 @@
-import { baseURL } from 'client/src/api'
+import { baseURL } from '~/api'
 
 export const getFileUrl = (fileName: string): string | undefined => {
   if (fileName) {

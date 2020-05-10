@@ -2,11 +2,11 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button, Image } from 'semantic-ui-react'
 import DefaultImage from './defaultImage.jpg'
-import { getFileUrl } from 'client/src/utils'
-import User from 'client/src/store/user'
+import { getFileUrl } from '~/utils'
+import User from '~/store/user'
 import { useEffect, useMemo } from 'react'
-import { useAccount } from 'client/src/hooks/user'
-import { useInputFile } from 'client/src/hooks'
+import { useAccount } from '~/hooks/user'
+import { useInputFile } from '~/hooks'
 
 type Props = {}
 

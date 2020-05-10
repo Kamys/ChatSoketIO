@@ -1,7 +1,7 @@
 import { createEffect, createStore } from 'effector'
 import { ChatElement } from './type'
-import { IDictionary } from '../../type'
-import { axiosInstance } from 'client/src/api'
+import { IDictionary } from '~/type'
+import { axiosInstance } from '~/api'
 import { IViewMessage } from 'server/src/message/type'
 import { messageToChatItem } from './utils'
 

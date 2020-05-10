@@ -5,7 +5,13 @@
     "outDir": "./dist",
     "composite": true,
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": [ "./src/*" ],
+      "~store/*": [ "./src/store/*" ],
+      "~components/*": [ "./src/components/*" ]
+    }
   },
   "references": [
     {
