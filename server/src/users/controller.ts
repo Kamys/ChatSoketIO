@@ -53,12 +53,16 @@ const login = async (req: RequestUser<UserLoginBody>, res) => {
   const { body } = req
   const { error } = utils.validateUser(body)
   if (error) {
-    res.status(400).send(error.details[0].message)
+    // TODO: Out this validation
+    res.status(HTTP_STATUS.BAD_REQUEST).send({
+      error: error.details[0].message,
+      path: error.details[0].path
+    })
     return
   }
   const user = await User.getByName(body.name)
   if (!user) {
-    res.status(400).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
+    res.status(HTTP_STATUS.NOT_FOUND).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
     return
   }
 
@@ -67,7 +71,7 @@ const login = async (req: RequestUser<UserLoginBody>, res) => {
     user.password
   )
   if (!isPasswordCorrect) {
-    res.status(401).send(SERVER_ERROR.PASSWORD_INCORRECT)
+    res.status(HTTP_STATUS.UNAUTHORIZED).send(SERVER_ERROR.PASSWORD_INCORRECT)
     return
   }
 

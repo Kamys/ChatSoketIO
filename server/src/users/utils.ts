@@ -31,7 +31,7 @@ type User = {
   password: string
 }
 
-const validateUser = (user: User): { error: any } => ({ error: null })
+const validateUser = (user: User) => userSchema.validate(user)
 
 const generateAuthToken = user => {
   const userPayload: IUserJWTPayload = { id: user._id, name: user.name }

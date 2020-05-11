@@ -12,7 +12,6 @@ import Message from './message'
 import User from './users'
 import checkEnvironment from './utils/checkEnvironment'
 
-
 const app = express()
 const http = createServer(app)
 
@@ -24,9 +23,13 @@ if (errorEnv) {
 }
 
 mongoose
-  .connect('mongodb://localhost/nodejsauth', { useNewUrlParser: true })
+  .connect('mongodb://localhost/nodejsauth', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => console.log('Connected to MongoDB...'))
-  .catch(err => console.error('Could not connect to MongoDB...', err))
+  .catch((err) => console.error('Could not connect to MongoDB...', err))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -56,7 +59,7 @@ app.use((error, req, res, next) => {
   } else {
     res.status(500).send({
       messages: 'Not handle error ¯\\_(ツ)_/¯',
-      error: error.toString()
+      error: error.toString(),
     })
   }
 })
@@ -86,3 +89,5 @@ http.listen(3000, () => {
 })
 
 User.chat.run(http)
+
+export default app
