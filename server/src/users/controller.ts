@@ -1,9 +1,11 @@
-import { RequestUser, UnAuthRequest } from '../type'
-import { IUser } from './type'
-import User from './model'
-import utils from './utils'
-import { SERVER_ERROR } from '../constants/error'
 import { HTTP_STATUS } from 'server/src/domainError/types'
+
+import { SERVER_ERROR } from '../constants/error'
+import { RequestUser, UnAuthRequest } from '../type'
+
+import User from './model'
+import { IUser } from './type'
+import utils from './utils'
 
 const create = async (req: UnAuthRequest<IUser>, res) => {
   const { body } = req

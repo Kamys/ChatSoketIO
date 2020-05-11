@@ -1,7 +1,8 @@
 import socketIOClient from 'socket.io-client'
-import { getToken } from '../api/utils'
 import user from '~/store//user'
-import { baseURL } from '../api'
+
+import { baseURL } from '~/api'
+import { getToken } from '~/api/utils'
 
 const socket = socketIOClient(baseURL, {
   autoConnect: false,

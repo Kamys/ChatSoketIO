@@ -1,16 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react'
+
 import { Message as MessageInfo } from 'semantic-ui-react'
-import Chat from '../components/Chat/Chat'
 import { ChatItem } from '~/components/Chat/type'
-import { useDidMount } from '~/hooks'
-import chat from '../chat'
-import Message from '../components/Chat/Message'
 import { formatChatDate } from '~/components/Chat/utils'
-import useChat from '../hooks/useChat'
-import { ItemType } from '~/store/messages/type'
-import { useSelectedUser, useAccount, useGetAvatar } from '~/hooks/user'
+import { useDidMount } from '~/hooks'
+import { useAccount, useGetAvatar, useSelectedUser } from '~/hooks/user'
 import MessageStore from '~/store/messages'
+import { ItemType } from '~/store/messages/type'
 import { getFileUrl } from '~/utils'
+
+import chat from '../chat'
+import Chat from '../components/Chat/Chat'
+import Message from '../components/Chat/Message'
+import useChat from '../hooks/useChat'
 type Props = {
   chatId: string
 }

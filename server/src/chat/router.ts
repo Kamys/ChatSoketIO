@@ -1,12 +1,14 @@
 import express, { Router } from 'express'
-import auth from '../middleware/auth'
 import { validate } from 'express-validation'
+
+import auth from '../middleware/auth'
+
 import {
   createPersonal,
-  getChat,
-  myChats,
   createPersonalValidation,
+  getChat,
   getChatValidation,
+  myChats,
 } from './controller'
 
 const router: Router = express.Router()

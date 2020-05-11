@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react'
+
 import { List } from 'semantic-ui-react'
 import styled from 'styled-components'
+
 import { Avatar } from '../Avatar'
 
 const Item = styled.div`

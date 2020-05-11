@@ -1,10 +1,12 @@
-import { isValidId } from '../utils/validation'
+import { IChat } from 'server/src/chat/type'
 import { DomainError } from 'server/src/domainError'
 import { IViewMessage } from 'server/src/message/type'
 import { IUserJWTPayload } from 'server/src/users/type'
-import { IChat } from 'server/src/chat/type'
-import Message from './model'
+
 import Chat from '../chat'
+import { isValidId } from '../utils/validation'
+
+import Message from './model'
 import utils from './utils'
 
 const isChatMember = (chat: IChat, userId: string): boolean => {

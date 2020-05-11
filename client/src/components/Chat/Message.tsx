@@ -1,8 +1,10 @@
 import * as React from 'react'
+
 import { Comment } from 'semantic-ui-react'
-import { ChatMessage } from './type'
 import styled from 'styled-components'
 import { Avatar } from '~/components/Avatar'
+
+import { ChatMessage } from './type'
 
 const CommentDiv = styled.div`
   &&& {

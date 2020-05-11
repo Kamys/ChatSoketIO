@@ -1,15 +1,16 @@
 import express from 'express'
 import fileUpload from 'express-fileupload'
-import { DomainError } from 'server/src/domainError'
-import { createServer } from 'http'
-import path from 'path'
-import mongoose from 'mongoose'
-import checkEnvironment from './utils/checkEnvironment'
-import User from './users'
-import Chat from './chat'
-import Message from './message'
-import File from './file'
 import { ValidationError } from 'express-validation'
+import { createServer } from 'http'
+import mongoose from 'mongoose'
+import path from 'path'
+import { DomainError } from 'server/src/domainError'
+
+import Chat from './chat'
+import File from './file'
+import Message from './message'
+import User from './users'
+import checkEnvironment from './utils/checkEnvironment'
 
 
 const app = express()

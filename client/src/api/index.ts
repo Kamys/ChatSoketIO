@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { getToken, setToken } from './utils'
 
 const savedToken = getToken()

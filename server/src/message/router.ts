@@ -1,7 +1,9 @@
 import express from 'express'
-import auth from '../middleware/auth'
-import Controller from './controller'
 import { RequestUser } from 'server/src/type'
+
+import auth from '../middleware/auth'
+
+import Controller from './controller'
 
 const router = express.Router()
 

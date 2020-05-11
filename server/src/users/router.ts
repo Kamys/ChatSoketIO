@@ -1,8 +1,10 @@
 import express from 'express'
-import auth from '../middleware/auth'
-import { create, getCurrent, login, getAllContacts, setAvatar } from './controller'
-import { RequestFiles } from 'server/src/type'
 import ControllerFile from 'server/src/file/controller'
+import { RequestFiles } from 'server/src/type'
+
+import auth from '../middleware/auth'
+
+import { create, getAllContacts, getCurrent, login, setAvatar } from './controller'
 
 const router = express.Router()
 

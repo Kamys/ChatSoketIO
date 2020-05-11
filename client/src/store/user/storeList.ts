@@ -1,6 +1,8 @@
 import { createEffect, createStore } from 'effector'
+
+import { axiosInstance } from '~/api'
+
 import { IUser } from './user'
-import { axiosInstance } from '../../api'
 
 const getAll = createEffect<void, IUser[], void>('getAll', {
   handler: () => {

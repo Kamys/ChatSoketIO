@@ -1,9 +1,11 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { ROUT_URL } from './constants'
+
+import { ContainerChat } from '~/container/ContainerChat'
 import { MainPage } from '../MainPage/MainPage'
-import { ContainerChat } from '../../container/ContainerChat'
 import SettingPage from '../SettingPage'
+
+import { ROUT_URL } from './constants'
 type Props = {}
 
 const PrivateRouter: React.FC<Props> = () => {

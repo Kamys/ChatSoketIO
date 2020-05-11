@@ -1,8 +1,9 @@
 import { createEffect, createStore } from 'effector'
-import { ChatElement } from './type'
-import { IDictionary } from '~/type'
-import { axiosInstance } from '~/api'
 import { IViewMessage } from 'server/src/message/type'
+import { axiosInstance } from '~/api'
+import { IDictionary } from '~/type'
+
+import { ChatElement } from './type'
 import { messageToChatItem } from './utils'
 
 const getAllMessages = createEffect<{ chatId: string }, IViewMessage[], void>(

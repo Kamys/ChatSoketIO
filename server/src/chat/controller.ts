@@ -1,9 +1,11 @@
 import { HUR } from 'server/src/type'
-import Chat from './model'
-import utils from './utils'
-import Users from '../users'
-import { IChat } from './type'
 import RequestValidation from 'server/src/utils/RequestValidation'
+
+import Users from '../users'
+
+import Chat from './model'
+import { IChat } from './type'
+import utils from './utils'
 
 type ChatCreateBody = {
   memberId?: string

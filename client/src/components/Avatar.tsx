@@ -1,7 +1,9 @@
 import React from 'react'
+
 import isEmpty from 'lodash/isEmpty'
-import AvatarDefault from './SettingPage/defaultImage.jpg'
 import styled from 'styled-components'
+
+import AvatarDefault from './SettingPage/defaultImage.jpg'
 
 type Props = {
   imageSrc?: string

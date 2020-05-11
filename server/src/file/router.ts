@@ -1,8 +1,8 @@
 import express from 'express'
-import { RequestUser } from 'server/src/type'
-import Utils from 'server/src/file/utils'
 import { DomainError } from 'server/src/domainError'
 import { HTTP_STATUS } from 'server/src/domainError/types'
+import Utils from 'server/src/file/utils'
+import { RequestUser } from 'server/src/type'
 
 const router = express.Router()
 

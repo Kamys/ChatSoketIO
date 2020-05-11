@@ -1,6 +1,8 @@
 import React from 'react'
+
 import { Header, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
+
 import { ChatItem } from './type'
 import MessageList from './MessageList'
 

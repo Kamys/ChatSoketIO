@@ -1,4 +1,5 @@
 import isEqual from 'lodash/isEqual'
+
 import { Chat } from './type'
 
 export const getChatByMember = (chats: Chat[], memberIds: string[]): Chat | undefined => {
