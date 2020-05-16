@@ -1,11 +1,6 @@
-import express from 'express'
 import { RequestUser } from 'server/src/type'
 
-import auth from '../middleware/auth'
-
 import Controller from './controller'
-
-const router = express.Router()
 
 type GetMessagesQuery = {
   chatId: string
@@ -40,7 +35,9 @@ const handlerCreateMessages = async (req: RequestUser<CreateMessagesBody>, res, 
   }
 }
 
-router.get('/', auth, handlerGetMessages)
-router.post('/', auth, handlerCreateMessages)
 
-export default router
+
+export default {
+  handlerCreateMessages,
+  handlerGetMessages,
+}

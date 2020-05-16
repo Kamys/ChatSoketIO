@@ -1,9 +1,9 @@
-import router from './router'
+import middleware from './middleware'
 import utils from './utils'
 import model from './model'
 
 export default {
   ...model,
-  router,
+  middleware,
   utils,
 }

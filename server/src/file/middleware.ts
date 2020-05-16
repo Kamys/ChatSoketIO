@@ -1,10 +1,7 @@
-import express from 'express'
-import { DomainError } from 'server/src/domainError'
-import { HTTP_STATUS } from 'server/src/domainError/types'
-import Utils from 'server/src/file/utils'
-import { RequestUser } from 'server/src/type'
-
-const router = express.Router()
+import { DomainError } from '~/domainError'
+import { HTTP_STATUS } from '~/domainError/types'
+import Utils from '~/file/utils'
+import { RequestUser } from '~/type'
 
 type GetFileQuery = {
   fileName: string
@@ -34,6 +31,8 @@ const handlerGetFile = async (req: RequestUser<void, GetFileQuery>, res, next) =
   }
 }
 
-router.get('/', handlerGetFile)
 
-export default router
+
+export default {
+  handlerGetFile
+}

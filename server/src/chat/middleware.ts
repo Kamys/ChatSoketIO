@@ -57,4 +57,4 @@ const myChats: HUR = async (req, res) => {
   res.status(200).send(currentChat)
 }
 
-export { createPersonal, myChats, getChat, createPersonalValidation, getChatValidation }
+export default { createPersonal, myChats, getChat, createPersonalValidation, getChatValidation }

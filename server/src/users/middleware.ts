@@ -1,11 +1,12 @@
 import { HTTP_STATUS } from 'server/src/domainError/types'
 
-import { SERVER_ERROR } from '../constants/error'
-import { RequestUser, UnAuthRequest } from '../type'
+import { SERVER_ERROR } from '~/constants/error'
+import { RequestFiles, RequestUser, UnAuthRequest } from '~/type'
 
 import User from './model'
 import { IUser } from './type'
 import utils from './utils'
+import ControllerFile from '~/file/controller'
 
 const create = async (req: UnAuthRequest<IUser>, res) => {
   const { body } = req
@@ -77,7 +78,7 @@ const login = async (req: RequestUser<UserLoginBody>, res) => {
 
   const token = utils.generateAuthToken(user)
   res.send({
-    user: utils.toView(user),
+    ...utils.toView(user),
     token,
   })
 }
@@ -93,4 +94,15 @@ const setAvatar = async (userId: string, fileName: string) => {
   await user.save()
 }
 
-export { create, getCurrent, login, getAllContacts, setAvatar }
+const handleSetAvatar = async (req: RequestFiles, res, next) => {
+  try {
+    const { user } = req
+    const fileName = await ControllerFile.saveFile(req.files.avatar)
+    await setAvatar(user.id, fileName)
+    res.status(200).send(fileName)
+  } catch (e) {
+    next(e)
+  }
+}
+
+export default { create, getCurrent, login, getAllContacts, handleSetAvatar }

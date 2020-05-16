@@ -2,31 +2,32 @@ import request from 'supertest'
 import app from '../../index'
 import { HTTP_STATUS } from '../../domainError/types'
 
-jest.mock('../../middleware/auth', () => {
-  return (req, res, next) => {
-    next()
-  }
-})
-
 describe('user', () => {
-  it('User login correct', (done) => {
+  it('login correct', (done) => {
     request(app)
       .post('/api/users/login')
       .send({name: 'Vasa', password: '123'})
-      .expect(HTTP_STATUS.OK, {
-        user: {
-          name: 'Vasa'
-        }
-      }, done)
+      .expect(HTTP_STATUS.OK)
+      .end(function(err, res) {
+        if (err) return done(err)
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            token: expect.any(String),
+            id: expect.any(String),
+            name: 'Vasa',
+          }),
+        )
+        done()
+      })
   })
-  it('User login failed if password incorrect', (done) => {
+  it('failed if password incorrect', (done) => {
     request(app)
       .post('/api/users/login')
       .send({name: 'Vasa', password: '000'})
       .expect(HTTP_STATUS.UNAUTHORIZED)
       .end(done)
   })
-  it('User login failed validation name', (done) => {
+  it('failed validation name', (done) => {
     request(app)
       .post('/api/users/login')
       .send({name: 'Va', password: '000'})

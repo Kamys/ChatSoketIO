@@ -1,5 +1,5 @@
-import router from './router'
+import middleware from './middleware'
 
 export default {
-  router,
+  middleware,
 }

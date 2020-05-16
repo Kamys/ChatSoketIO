@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken'
 import { IUser, IUserJWTPayload, IViewUser } from './type'
 import config from '../config'
 
-export const toHas = async (password: string): Promise<string> => {
+const toHas = async (password: string): Promise<string> => {
   return bcrypt.hash(password.toString(), 10)
 }
 
-export const checkPassword = async (
+const checkPassword = async (
   password: string,
   hash: string
 ): Promise<boolean> => bcrypt.compare(password, hash)

@@ -1,4 +1,4 @@
-import router from './router'
+import middleware from './middleware'
 import utils from './utils'
 import model from './model'
 import controller from './controller'
@@ -6,6 +6,6 @@ import controller from './controller'
 export default {
   ...model,
   controller,
-  router,
+  middleware,
   utils,
 }

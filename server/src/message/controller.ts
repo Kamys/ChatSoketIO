@@ -4,7 +4,7 @@ import { IViewMessage } from 'server/src/message/type'
 import { IUserJWTPayload } from 'server/src/users/type'
 
 import Chat from '../chat'
-import { isValidId } from '../utils/validation'
+import { isValidId } from '~/utils/validation'
 
 import Message from './model'
 import utils from './utils'

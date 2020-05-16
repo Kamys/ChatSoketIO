@@ -1,6 +1,6 @@
-import { SERVER_ERROR } from '../constants/error'
-import User from '../users'
-import { HUR } from 'server/src/type'
+import { SERVER_ERROR } from '~/constants/error'
+import UserUtils from '~/users/utils'
+import { HUR } from '~/type'
 
 const auth: HUR = (req, res, next) => {
   const tokenString = req.headers.authorization as string
@@ -11,7 +11,7 @@ const auth: HUR = (req, res, next) => {
 
   const token = tokenString.replace('Bearer ', '')
   try {
-    req.user = User.utils.verifyAuthToken(token)
+    req.user = UserUtils.verifyAuthToken(token)
     next()
   } catch (ex) {
     res.status(401).send(SERVER_ERROR.ACCESS_TOKEN_INVALID)

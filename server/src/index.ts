@@ -6,9 +6,7 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { DomainError } from 'server/src/domainError'
 
-import Chat from './chat'
-import File from './file'
-import Message from './message'
+import Routing from './routing'
 import User from './users'
 import checkEnvironment from './utils/checkEnvironment'
 
@@ -39,10 +37,7 @@ app.use((req, res, next) => {
 app.use(fileUpload())
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../dist')))
-app.use('/api/users', User.router)
-app.use('/api/chats', Chat.router)
-app.use('/api/messages', Message.router)
-app.use('/api/file', File.router)
+app.use('/api', Routing)
 
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
