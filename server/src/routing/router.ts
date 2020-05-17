@@ -10,7 +10,7 @@ import File from '~/file'
 const router = express.Router()
 
 // User
-router.post('/users/', Users.middleware.create)
+router.post('/users', Users.middleware.create)
 router.post('/users/login', Users.middleware.login)
 router.get('/users/current', auth, Users.middleware.getCurrent)
 router.get('/users/contacts', auth, Users.middleware.getAllContacts)

@@ -56,6 +56,8 @@ const run = (http: Server) => {
     postAuthenticate,
     disconnect: async () => {},
   })
+
+  return io
 }
 
 export default { run }

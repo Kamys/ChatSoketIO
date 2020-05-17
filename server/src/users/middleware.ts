@@ -12,26 +12,26 @@ const create = async (req: UnAuthRequest<IUser>, res) => {
   const { body } = req
   const { error } = utils.validateUser(body)
   if (error) {
-    res.status(400).send(error.details[0].message)
+    res.status(HTTP_STATUS.BAD_REQUEST).send({
+      path: error.details[0].path,
+      error: error.details[0].message,
+    })
     return
   }
 
-  let user: IUser = await User.getByName(body.name)
-  if (user) {
+  const existUser: IUser = await User.getByName(body.name)
+  if (existUser) {
     res.status(400).send('User already registered.')
     return
   }
 
-  user = User.createModel(body.name, body.password)
-  user.password = await utils.toHas(user.password)
+  const user = await User.createModel(body.name, body.password)
   await user.save()
 
   const token = utils.generateAuthToken(user)
   res.send({
-    user: {
-      id: user._id,
-      name: user.name,
-    },
+    id: user._id,
+    name: user.name,
     token,
   })
 }
@@ -52,9 +52,9 @@ type UserLoginBody = {
 
 const login = async (req: RequestUser<UserLoginBody>, res) => {
   const { body } = req
+  // TODO: Out this validation
   const { error } = utils.validateUser(body)
   if (error) {
-    // TODO: Out this validation
     res.status(HTTP_STATUS.BAD_REQUEST).send({
       error: error.details[0].message,
       path: error.details[0].path
@@ -63,7 +63,9 @@ const login = async (req: RequestUser<UserLoginBody>, res) => {
   }
   const user = await User.getByName(body.name)
   if (!user) {
-    res.status(HTTP_STATUS.NOT_FOUND).send(SERVER_ERROR.USER_NAME_NOT_FOUND)
+    res.status(HTTP_STATUS.NOT_FOUND).send({
+      error: SERVER_ERROR.USER_NAME_NOT_FOUND
+    })
     return
   }
 

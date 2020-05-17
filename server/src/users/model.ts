@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { IUser } from './type'
+import utils from '~/users/utils'
 
 const UserSchema = new Schema({
   name: {
@@ -20,10 +21,11 @@ const UserSchema = new Schema({
 
 const Model = mongoose.model<IUser>('User', UserSchema)
 
-const createModel = (name: string, password: string) => {
+const createModel = async (name: string, password: string) => {
+  const hasPassword = await utils.toHas(password)
   return new Model({
     name,
-    password,
+    password: hasPassword,
   })
 }
 
