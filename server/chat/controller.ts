@@ -6,7 +6,7 @@ import { IChat } from './type'
 import RequestValidation from 'server/utils/RequestValidation'
 
 type ChatCreateBody = {
-  memberId: string
+  memberId?: string
 }
 
 const createPersonalValidation = {

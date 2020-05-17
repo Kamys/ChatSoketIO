@@ -26,8 +26,18 @@ const handlerGetFile = async (req: RequestUser<void, GetFileQuery>, res, next) =
     }
   }
 
+  const images = await Utils.getAllImageNames()
+  const existImageName = images.find(imageName => imageName === fileName)
+
+  if (!existImageName) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      path: 'fileName',
+      error: 'File not found'
+    })
+  }
+
   try {
-    const filePath = Utils.getFilePath(fileName)
+    const filePath = Utils.getFilePath(existImageName)
     res.sendFile(filePath, errorHandle)
   } catch (e) {
     next(e)

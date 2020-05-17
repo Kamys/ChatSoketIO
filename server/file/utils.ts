@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import { FILES_DIR } from './constants'
 
 const getFilePath = (fileName: string) => {
@@ -6,4 +7,8 @@ const getFilePath = (fileName: string) => {
   return path.resolve(filePath)
 }
 
-export default { getFilePath }
+const getAllImageNames = async (): Promise<string[]> => {
+  return fs.readdirSync(FILES_DIR)
+}
+
+export default { getFilePath, getAllImageNames }
