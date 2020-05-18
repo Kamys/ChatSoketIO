@@ -1,28 +1,63 @@
-export enum DomainErrorType {
+/**
+ * @deprecated
+ */
+export enum DomainErrorTypeOld {
   NotFound = 'NotFound',
   Forbidden = 'Forbidden',
   InvalidArgs = 'InvalidArguments',
 }
 
+export type DomainErrorsType =
+  | 'NotFound'
+  | 'Forbidden'
+  | 'InvalidArguments'
+  | 'InvalidObjectId'
+  | 'ModelAlreadyExist'
+  | 'ModelNotFound'
+
+export type DomainErrorParams = {
+  path?: string[]
+  messages: string
+}
+
+export type ModelNames = 'User'
+
+export type ModelErrorParams = {
+  modelName: ModelNames
+  messages?: string
+}
+
+
+/**
+ * @deprecated
+ */
 export type InvalidArgsErrorProps = {
   validationMessages: string
   argumentName: string
 }
-
+/**
+ * @deprecated
+ */
 export type InvalidObjectIdProps = {
   argumentName: string
 }
-
+/**
+ * @deprecated
+ */
 export type NotFoundProps = {
   searchParams?: object
   whatNotFound: string
 }
-
+/**
+ * @deprecated
+ */
 export type NotFoundEntityProps = {
   searchParams?: object
   entityName: string
 }
-
+/**
+ * @deprecated
+ */
 export type ForbiddenErrorProps = {
   whoTried: string
   protectedEntityName: string
@@ -85,4 +120,3 @@ export enum HTTP_STATUS {
   UNSUPPORTED_MEDIA_TYPE = 415,
   USE_PROXY = 305,
 }
-

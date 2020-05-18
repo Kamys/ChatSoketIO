@@ -1,6 +1,6 @@
-import { SERVER_ERROR } from '~/constants/error'
 import UserUtils from '~/users/utils'
 import { HUR } from '~/type'
+import { SERVER_ERROR } from '~/domainError/constants'
 
 const auth: HUR = (req, res, next) => {
   const tokenString = req.headers.authorization as string

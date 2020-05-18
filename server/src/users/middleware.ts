@@ -1,14 +1,14 @@
 import { HTTP_STATUS } from 'server/src/domainError/types'
-
-import { SERVER_ERROR } from '~/constants/error'
 import { RequestFiles, RequestUser, UnAuthRequest } from '~/type'
 
 import User from './model'
 import { IUser } from './type'
 import utils from './utils'
 import ControllerFile from '~/file/controller'
+import { DomainError } from '~/domainError'
+import { SERVER_ERROR } from '~/domainError/constants'
 
-const create = async (req: UnAuthRequest<IUser>, res) => {
+const create = async (req: UnAuthRequest<IUser>, res, next) => {
   const { body } = req
   const { error } = utils.validateUser(body)
   if (error) {
@@ -21,14 +21,17 @@ const create = async (req: UnAuthRequest<IUser>, res) => {
 
   const existUser: IUser = await User.getByName(body.name)
   if (existUser) {
-    res.status(400).send('User already registered.')
+    const error = DomainError.alreadyExist({
+      modelName: 'User',
+    })
+    next(error)
     return
   }
 
   const user = await User.createModel(body.name, body.password)
   await user.save()
 
-  const token = utils.generateAuthToken(user)
+  const token = utils.generateAuthToken({ id: user._id, name: user.name })
   res.send({
     id: user._id,
     name: user.name,
@@ -38,10 +41,6 @@ const create = async (req: UnAuthRequest<IUser>, res) => {
 
 const getCurrent = async (req: RequestUser, res) => {
   const user = await User.getById(req.user.id)
-  if (!user) {
-    res.status(HTTP_STATUS.FORBIDDEN).send()
-    return
-  }
   res.send(utils.toView(user))
 }
 
@@ -78,7 +77,7 @@ const login = async (req: RequestUser<UserLoginBody>, res) => {
     return
   }
 
-  const token = utils.generateAuthToken(user)
+  const token = utils.generateAuthToken({ id: user._id, name: user.name })
   res.send({
     ...utils.toView(user),
     token,

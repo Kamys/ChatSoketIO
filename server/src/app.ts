@@ -4,7 +4,7 @@ import { ValidationError } from 'express-validation'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import path from 'path'
-import { DomainError } from 'server/src/domainError'
+import { DomainErrorOld, DomainError } from 'server/src/domainError'
 
 import Routing from './routing'
 import User from './users'
@@ -46,11 +46,17 @@ export const createApp = (mongodbUrl: string) => {
     if (error instanceof ValidationError) {
       return res.status(error.statusCode).json(error)
     }
-    if (error instanceof DomainError) {
+    if (error instanceof DomainErrorOld) {
       return res.status(error.httpStatus).send({
         messages: 'Not handle domain error',
         error: error.domainErrorType,
         ...error.errorInfo,
+      })
+    } if (error instanceof DomainError) {
+      return res.status(error.httpStatus).send({
+        error: error.message,
+        path: error.path,
+        domainErrorType: error.domainErrorType,
       })
     } else {
       res.status(500).send({

@@ -1,4 +1,4 @@
-import { DomainError } from '~/domainError'
+import { DomainErrorOld } from '~/domainError'
 import { HTTP_STATUS } from '~/domainError/types'
 import Utils from '~/file/utils'
 import { RequestUser } from '~/type'
@@ -11,7 +11,7 @@ const handlerGetFile = async (req: RequestUser<void, GetFileQuery>, res, next) =
   const { fileName } = req.query
   const errorHandle = error => {
     if (error && error.status == HTTP_STATUS.NOT_FOUND) {
-      const domainError = DomainError.notFound({
+      const domainError = DomainErrorOld.notFound({
         whatNotFound: 'File',
         searchParams: { fileName },
       })

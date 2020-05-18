@@ -2,13 +2,13 @@ import { Server } from 'http'
 import socketIo, { Socket } from 'socket.io'
 import socketAuth from 'socketio-auth'
 
-import { SERVER_ERROR } from '~/constants/error'
 import { IChat } from '~/chat/type'
 import Chats from '~/chat'
 import Message from '~/message'
 
 import { IUserJWTPayload } from './type'
 import utils from './utils'
+import { SERVER_ERROR } from '~/domainError/constants'
 
 interface ISocketChat extends Socket {
   user: IUserJWTPayload

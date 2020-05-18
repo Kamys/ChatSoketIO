@@ -1,5 +1,5 @@
 import { IChat } from 'server/src/chat/type'
-import { DomainError } from 'server/src/domainError'
+import { DomainErrorOld } from 'server/src/domainError'
 import { IViewMessage } from 'server/src/message/type'
 import { IUserJWTPayload } from 'server/src/users/type'
 
@@ -15,17 +15,17 @@ const isChatMember = (chat: IChat, userId: string): boolean => {
 
 const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IViewMessage[]> => {
   if (!isValidId(chatId)) {
-    throw DomainError.invalidObjectId({ argumentName: 'chatId' })
+    throw DomainErrorOld.invalidObjectId({ argumentName: 'chatId' })
   }
   const chat = await Chat.findById(chatId)
   if (!chat) {
-    throw DomainError.notFoundEntity({
+    throw DomainErrorOld.notFoundEntity({
       entityName: 'Chat',
       searchParams: { chatId },
     })
   }
   if (!isChatMember(chat, user.id)) {
-    throw DomainError.forbidden({
+    throw DomainErrorOld.forbidden({
       whoTried: user.name,
       protectedEntityName: 'Chat',
       reason: 'You not chat member',
@@ -38,16 +38,16 @@ const getMessages = async (user: IUserJWTPayload, chatId: string): Promise<IView
 const createMessages = async (user: IUserJWTPayload, chatId: string, text: string): Promise<IViewMessage> => {
   const chat = await Chat.findById(chatId)
   if (!isValidId(chatId)) {
-    throw DomainError.invalidObjectId({ argumentName: 'chatId' })
+    throw DomainErrorOld.invalidObjectId({ argumentName: 'chatId' })
   }
   if (!chat) {
-    throw DomainError.notFoundEntity({
+    throw DomainErrorOld.notFoundEntity({
       entityName: 'Chat',
       searchParams: { chatId },
     })
   }
   if (!isChatMember(chat, user.id)) {
-    throw DomainError.forbidden({
+    throw DomainErrorOld.forbidden({
       whoTried: user.name,
       protectedEntityName: 'Chat',
       reason: 'You not chat member',
