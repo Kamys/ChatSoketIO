@@ -53,7 +53,7 @@ const createMessages = async (user: IUserJWTPayload, chatId: string, text: strin
       reason: 'You not chat member',
     })
   }
-  const message = await Message.createModel({
+  const message = Message.createModel({
     chatId: chat._id,
     creatorId: user.id,
     creatorName: user.name,

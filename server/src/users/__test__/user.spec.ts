@@ -5,6 +5,8 @@ import { HTTP_STATUS } from '../../domainError/types'
 import mongoose from 'mongoose'
 import { createUser } from '../../__test__/utils'
 import utils from '../utils'
+import path from 'path'
+import fs from 'fs'
 
 describe('user', () => {
   const mongodbUrl = (global as any).__MONGO_URI__
@@ -163,5 +165,47 @@ describe('user', () => {
         id,
         name,
       }, done)
+  })
+
+  describe('contacts', () => {
+    it('get error avatar is required', async (done) => {
+      const { token } = await createUser()
+
+      const imagePath = path.resolve('./src/users/__test__/userAvatar.png')
+      request(app)
+        .post('/api/users/avatar')
+        .attach('file', imagePath)
+        .set('authorization', token)
+        .expect(HTTP_STATUS.BAD_REQUEST, {
+          domainErrorType: 'InvalidArguments',
+          error: 'File avatar is required',
+          path: [
+            'files',
+            'avatar'
+          ]
+        }, done)
+    })
+
+    it('get image path', async (done) => {
+      const { token } = await createUser()
+
+      const imagePath = path.resolve('./src/users/__test__/userAvatar.png')
+      request(app)
+        .post('/api/users/avatar')
+        .attach('avatar', imagePath)
+        .set('authorization', token)
+        .expect(HTTP_STATUS.OK)
+        .end((err, res) => {
+          if (err) return done(err)
+          const fileName = res.body.fileName
+          expect(fileName).toEqual(expect.any(String))
+          const fulFIleName = path.resolve('../uploads', fileName)
+          const avatar = fs.readFileSync(fulFIleName)
+          const avatarActually = fs.readFileSync(imagePath)
+          expect(avatar.equals(avatarActually)).toBeTruthy()
+          fs.unlinkSync(fulFIleName)
+          done()
+        })
+    })
   })
 })
