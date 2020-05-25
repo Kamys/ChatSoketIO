@@ -44,7 +44,12 @@ export const createApp = (mongodbUrl: string) => {
   app.use((error, req, res, next) => {
     console.log('Not handle error: ', error)
     if (error instanceof ValidationError) {
-      return res.status(error.statusCode).json(error)
+      const detail = Object.values(error.details)[0][0]
+      return res.status(error.statusCode).json({
+        error: detail.message,
+        path: detail.path,
+        domainErrorType: 'Validation'
+      })
     }
     if (error instanceof DomainErrorOld) {
       return res.status(error.httpStatus).send({

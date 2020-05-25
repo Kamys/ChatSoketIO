@@ -14,6 +14,7 @@ export type DomainErrorsType =
   | 'InvalidObjectId'
   | 'ModelAlreadyExist'
   | 'ModelNotFound'
+  | 'Validation'
 
 export type DomainErrorParams = {
   path?: string[]

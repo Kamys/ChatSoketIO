@@ -7,7 +7,6 @@ import utils from './utils'
 import ControllerFile from '~/file/controller'
 import { DomainError } from '~/domainError'
 import { SERVER_ERROR } from '~/domainError/constants'
-import RequestValidation from '~/utils/RequestValidation'
 
 const create = async (req: UnAuthRequest<IUser>, res, next) => {
   const { body } = req
