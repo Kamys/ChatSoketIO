@@ -1,5 +1,5 @@
 # ChatSoketIO
 ```
-Старт сервера dev:server
-Старт клиента dev:client
+dev:server // Старт сервера 
+dev:client // Старт клиента 
 ```
